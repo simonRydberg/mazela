@@ -33,7 +33,7 @@ public class MonkeyClient extends SimpleApplication {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private GrizzlyNetworkClient networkClient;
-    private NetworkAppState networkAppstate;
+    private ProtobufAppState networkAppstate;
     private GameboardAppstate gameboardAppstate;
 
     private final ThreadFactory threadFactory = new ThreadFactory() {
@@ -88,7 +88,7 @@ public class MonkeyClient extends SimpleApplication {
         this.flyCam.setEnabled(false);
         this.gameboardAppstate = new GameboardAppstate();
         this.stateManager.attach(gameboardAppstate);
-        this.networkAppstate = new NetworkAppState(networkClient, gameboardAppstate);
+        this.networkAppstate = new ProtobufAppState(networkClient, gameboardAppstate);
 
         try {
             this.networkClient.awaitRunning(5, TimeUnit.SECONDS);

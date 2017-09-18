@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.mejsla.camp.mazela.game.physics.PhysicsSpace;
 import se.mejsla.camp.mazela.network.common.ConnectionID;
-import se.mejsla.camp.mazela.network.common.protocol.PositionUpdate;
 
 /**
  *
@@ -63,11 +62,16 @@ public class GameBoard {
         this.physicsSpace.tick(tpf);
     }
 
-    public List<PositionUpdate> encodeGameState() {
-        final ArrayList<PositionUpdate> result = new ArrayList<>();
+    public List<EntityUpdate> snapshotGamestate() {
+        final ArrayList<EntityUpdate> result = new ArrayList<>();
         players.forEach((id, player) -> {
             final Vector2f positition = player.getPositition();
-            result.add(new PositionUpdate(id.getUuid(), positition.x, positition.y));
+            result.add(
+                    new EntityUpdate(
+                            id.getUuid(),
+                            positition.x,
+                            positition.y)
+            );
         });
         return result;
     }

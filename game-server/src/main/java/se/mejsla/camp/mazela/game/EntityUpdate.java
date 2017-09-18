@@ -13,26 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.mejsla.camp.mazela.network.common;
+package se.mejsla.camp.mazela.game;
+
+import java.util.UUID;
 
 /**
  *
  * @author Johan Maasing <johan@zoom.nu>
  */
-public class MessageUtilities {
+public class EntityUpdate {
 
-    private static final int MAGIC_MARKER = 0xbadbabe;
+    private final UUID entityID;
+    private final float x;
+    private final float y;
 
-    public static final int getMagicMarker() {
-        return MAGIC_MARKER;
+    public EntityUpdate(UUID entityID, float x, float y) {
+        this.entityID = entityID;
+        this.x = x;
+        this.y = y;
     }
 
-    public static final boolean isMagicMarker(final int in) {
-        return ((in & MAGIC_MARKER) == MAGIC_MARKER);
+    public UUID getEntityID() {
+        return entityID;
     }
 
-    public interface Attributes {
+    public float getX() {
+        return x;
+    }
 
-        public String CONNECTION_ID = "ConnectionID";
+    public float getY() {
+        return y;
     }
 }

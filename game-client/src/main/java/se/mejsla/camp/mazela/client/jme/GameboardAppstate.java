@@ -35,7 +35,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.mejsla.camp.mazela.network.common.protocol.PositionUpdate;
 
 /**
  *
@@ -46,7 +45,7 @@ public class GameboardAppstate extends AbstractAppState {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final HashMap<UUID, Node> entityNodes = new HashMap<>();
     private AssetManager assetManager;
-    private List<PositionUpdate> pendingUpdates = null;
+    private List<EntityUpdate> pendingUpdates = null;
     private Node rootNode;
     private Node entityNode;
 
@@ -66,7 +65,7 @@ public class GameboardAppstate extends AbstractAppState {
         if (this.pendingUpdates != null) {
             // Mutate the scene graph
             ArrayList<UUID> updatedEntities = new ArrayList<>();
-            for (PositionUpdate pu : this.pendingUpdates) {
+            for (EntityUpdate pu : this.pendingUpdates) {
                 final UUID entityUUID = pu.getEntityID();
                 Node playerNode = this.entityNodes.get(entityUUID);
                 if (playerNode == null) {
@@ -112,11 +111,11 @@ public class GameboardAppstate extends AbstractAppState {
         }
     }
 
-    public void setPendingUpdates(final List<PositionUpdate> updates) {
+    public void setPendingUpdates(final List<EntityUpdate> updates) {
         this.pendingUpdates = updates;
     }
 
-    private Vector3f transformCoordinatesFromServerToClient(PositionUpdate pu) {
+    private Vector3f transformCoordinatesFromServerToClient(EntityUpdate pu) {
         return new Vector3f(
                 pu.getX() * 4.0f - 2.0f,
                 pu.getY() * 4.0f - 2.0f,

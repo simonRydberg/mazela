@@ -1,0 +1,51 @@
+syntax = "proto3";
+package se.mejsla.camp.mazela.network.common.protos ;
+
+message AuthenticateRequest {
+    string name = 1;
+    string password = 2 ;
+}
+
+message Uuid {
+    fixed64 leastSignificantID = 2;
+    fixed64 mostSignificantID = 3;
+}
+
+message AuthenticationReply {
+    bool authenticated = 1;
+    Uuid uuid = 2;
+}
+
+message JoinPlayer {
+    string nickname = 1 ;
+}
+
+
+message GameboardUpdate {
+    message Coordinate {
+        float x = 1;
+        float y = 2 ;
+    }
+    message EntityUpdate {
+        Uuid uuid = 1;
+        Coordinate coords = 2;
+        int32 state = 6 ;
+    }
+    repeated EntityUpdate updates = 1 ;
+}
+
+message Envelope {
+    enum MessageType {
+        AuthenticateRequest = 0 ;
+        AuthenticationReply = 1 ;
+        JoinPlayer = 2 ;
+        GameboardUpdate = 3 ;
+    }
+    MessageType message_type = 1 ;
+    oneof content {
+        AuthenticateRequest authentication_request = 2 ;
+        AuthenticationReply authentication_reply = 3 ;
+        JoinPlayer join_player = 4 ;
+        GameboardUpdate gameboard_update = 5 ;
+    }
+}

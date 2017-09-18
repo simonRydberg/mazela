@@ -17,6 +17,7 @@ package se.mejsla.camp.mazela.server;
 
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.AbstractScheduledService;
+import com.google.protobuf.InvalidProtocolBufferException;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.UUID;
@@ -25,19 +26,20 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import nu.zoom.corridors.math.MathUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.mejsla.camp.mazela.game.EntityUpdate;
 import se.mejsla.camp.mazela.game.GameBoard;
 import se.mejsla.camp.mazela.network.common.ConnectionID;
-import se.mejsla.camp.mazela.network.common.MessageUtilities;
 import se.mejsla.camp.mazela.network.common.NotConnectedException;
 import se.mejsla.camp.mazela.network.common.OutgoingQueueFullException;
-import se.mejsla.camp.mazela.network.common.protocol.MessageCodec;
-import se.mejsla.camp.mazela.network.common.protocol.MessageType;
-import se.mejsla.camp.mazela.network.common.protocol.PositionUpdate;
+import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
+import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.Uuid;
 import se.mejsla.camp.mazela.network.server.IncomingMessage;
 import se.mejsla.camp.mazela.network.server.NetworkServer;
+import se.mejsla.camp.mazela.server.proto.Encoder;
 
 /**
  *
@@ -91,12 +93,11 @@ public class ServerService extends AbstractScheduledService {
         final float tpf = (float) MathUtil.nanosToSeconds(frameTime);
 
         this.gameBoard.tick(tpf);
-        final List<PositionUpdate> gameState = this.gameBoard.encodeGameState();
-        final ByteBuffer payload = MessageCodec.encodePositionUpdates(gameState);
+        final List<EntityUpdate> gameState = this.gameBoard.snapshotGamestate();
+        final ByteBuffer payload = Encoder.encodeGameState(gameState);
         try {
             for (ConnectionID cID : this.gameBoard.getPlayers()) {
                 this.networkServer.sendMessage(payload, cID);
-                payload.flip();
             }
         } catch (OutgoingQueueFullException | NotConnectedException ex) {
             log.error("Unable to send game state update to all clients", ex);
@@ -115,27 +116,47 @@ public class ServerService extends AbstractScheduledService {
             try {
                 final ConnectionID connectionID = incomingMessage.getConnectionID();
                 final ByteBuffer messageData = incomingMessage.getData();
-                final MessageType type = MessageCodec.getMessageType(messageData);
-                switch (type) {
-                    case AUTH_REQEUEST: {
-                        final int authToken
-                                = MessageCodec.decodeAuthenticationRequest(messageData);
+                final MazelaProtocol.Envelope envelope
+                        = MazelaProtocol.Envelope.parseFrom(messageData);
+                switch (envelope.getMessageType()) {
+                    case AuthenticateRequest: {
+                        final MazelaProtocol.AuthenticateRequest req
+                                = envelope.getAuthenticationRequest();
                         // Pretend we are looking up the user record
-                        final UUID result;
-                        if (MessageUtilities.AUTH_TOKEN == authToken) {
-                            result = connectionID.getUuid();
+                        final String username = req.getName();
+                        final String password = req.getPassword();
+                        final MazelaProtocol.AuthenticationReply.Builder replyBuilder
+                                = MazelaProtocol.AuthenticationReply.newBuilder();
+                        if (password != null && password.length() > 0 && username != null && username.length() > 0) {
+                            final UUID result = connectionID.getUuid();
+                            replyBuilder.setAuthenticated(true);
+                            replyBuilder.setUuid(
+                                    Uuid
+                                            .newBuilder()
+                                            .setLeastSignificantID(result.getLeastSignificantBits())
+                                            .setMostSignificantID(result.getMostSignificantBits())
+                                            .build()
+                            );
+                            log.debug("Authentication success for connection: {}", result, connectionID);
                             this.authenticatedConnections.add(connectionID);
                         } else {
-                            result = null;
+                            log.debug("Authentication failed for connection: {}", connectionID);
+                            replyBuilder.setAuthenticated(false);
                         }
-                        log.debug("Sending authentication reply: {} to connection: {}", result, connectionID);
                         networkServer.sendMessage(
-                                MessageCodec.encodeAuthenticationReply(result),
+                                ByteBuffer.wrap(
+                                        MazelaProtocol.Envelope
+                                                .newBuilder()
+                                                .setMessageType(MazelaProtocol.Envelope.MessageType.AuthenticationReply)
+                                                .setAuthenticationReply(replyBuilder.build())
+                                                .build()
+                                                .toByteArray()
+                                ),
                                 connectionID);
 
                         break;
                     }
-                    case JOIN_GAME_REQUEST: {
+                    case JoinPlayer: {
                         if (this.authenticatedConnections.contains(connectionID)) {
                             this.gameBoard.addPlayer(connectionID);
                         } else {
@@ -145,6 +166,8 @@ public class ServerService extends AbstractScheduledService {
                 }
             } catch (IllegalArgumentException | NotConnectedException | OutgoingQueueFullException e) {
                 log.error("Unable to parse network message", e);
+            } catch (InvalidProtocolBufferException ex) {
+                java.util.logging.Logger.getLogger(ServerService.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
