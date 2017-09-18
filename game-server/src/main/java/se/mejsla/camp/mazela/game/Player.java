@@ -15,8 +15,10 @@
  */
 package se.mejsla.camp.mazela.game;
 
-import nu.zoom.corridors.math.MathUtil;
-import nu.zoom.corridors.math.Vector2f;
+import com.google.common.base.Preconditions;
+import nu.zoom.corridors.math.XORShiftRandom;
+import org.dyn4j.dynamics.Body;
+import org.dyn4j.geometry.Vector2;
 
 /**
  *
@@ -24,30 +26,18 @@ import nu.zoom.corridors.math.Vector2f;
  */
 public class Player {
 
-    private Vector2f positition = new Vector2f((float) Math.random(), (float) Math.random());
-    private Vector2f velocity;
+    private final XORShiftRandom random = new XORShiftRandom(System.currentTimeMillis());
+    private final Body physicsBody;
 
-    public Player(final float initialX, final float initialY) {
-        this.velocity = new Vector2f(initialX, initialY);
-        this.velocity.normalize(this.velocity);
+    public Player(final Body physicsBody) {
+        this.physicsBody = Preconditions.checkNotNull(physicsBody);
     }
 
     public void update(final float tpf) {
-        this.positition.add(this.velocity.multiply(tpf, null), this.positition);
-
-        // Some sort of physically impossible bouncing :-)
-        if (this.positition.x > 1.0 || this.positition.x < 0.0) {
-            this.velocity.x = -this.velocity.x;
-            this.positition.x = MathUtil.clampToUnit(this.positition.x);
-        }
-        if (this.positition.y > 1.0 || this.positition.y < 0.0) {
-            this.velocity.y = -this.velocity.y;
-            this.positition.y = MathUtil.clampToUnit(this.positition.y);
-        }
+        //this.physicsBody.applyForce(new Vector2((random.unitRandom() / 2) * 200, random.unitRandom() * 200));
     }
 
-    public Vector2f getPositition() {
-        return positition;
+    public Body getPhysicsBody() {
+        return physicsBody;
     }
-
 }

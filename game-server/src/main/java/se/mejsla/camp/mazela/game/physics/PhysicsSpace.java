@@ -15,6 +15,7 @@
  */
 package se.mejsla.camp.mazela.game.physics;
 
+import org.dyn4j.collision.AxisAlignedBounds;
 import org.dyn4j.dynamics.World;
 
 /**
@@ -25,12 +26,17 @@ public class PhysicsSpace {
 
     private final World world;
 
-    public PhysicsSpace() {
-        this.world = new World();
+    public PhysicsSpace(final double worldBoundsWidth, final double worldBoundsHeight) {
+        final AxisAlignedBounds worldBounds
+                = new AxisAlignedBounds(worldBoundsWidth, worldBoundsHeight);
+        this.world = new World(worldBounds);
     }
 
     public void tick(final float tpf) {
         this.world.update(tpf);
     }
 
+    public World getWorld() {
+        return this.world;
+    }
 }

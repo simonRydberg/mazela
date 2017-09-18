@@ -20,12 +20,15 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +45,7 @@ import org.slf4j.LoggerFactory;
  */
 public class GameboardAppstate extends AbstractAppState {
 
+    private final float Z_AXIS_OFFSET = -40.0f;
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final HashMap<UUID, Node> entityNodes = new HashMap<>();
     private AssetManager assetManager;
@@ -55,9 +59,28 @@ public class GameboardAppstate extends AbstractAppState {
         this.rootNode = sapp.getRootNode();
         this.assetManager = sapp.getAssetManager();
         this.rootNode.addLight(new DirectionalLight(new Vector3f(0.5f, -1.0f, 0.0f).normalize()));
+        this.rootNode.addLight(new AmbientLight(new ColorRGBA(0.1f, 0.1f, 0.1f, 1.0f)));
         this.entityNode = new Node("Entities");
         this.rootNode.attachChild(this.entityNode);
+        addHorizontalEdge("top", 6f);
+        addHorizontalEdge("bottom", -6f);
         super.initialize(stateManager, app);
+    }
+
+    private void addHorizontalEdge(final String name, final float y) {
+        Geometry geom = new Geometry(name, new Box(10, 1, 1));
+        final Material mat = new Material(
+                assetManager,
+                "Common/MatDefs/Light/Lighting.j3md"
+        );
+        mat.setBoolean("UseMaterialColors", true);
+        mat.setColor("Diffuse", ColorRGBA.Green);
+        mat.setColor("Ambient", ColorRGBA.Green);
+        mat.setColor("Specular", ColorRGBA.White);
+        mat.setFloat("Shininess", 8f);  // [0,128]
+        geom.setMaterial(mat);
+        geom.setLocalTranslation(0, y, Z_AXIS_OFFSET);
+        rootNode.attachChild(geom);
     }
 
     @Override
@@ -72,7 +95,7 @@ public class GameboardAppstate extends AbstractAppState {
                     // New player
                     final Geometry geom = new Geometry(
                             entityUUID.toString() + "-geom",
-                            new Sphere(32, 32, 0.5f)
+                            new Sphere(32, 32, 1.0f)
                     );
                     final Material sphereMat = new Material(
                             assetManager,
@@ -80,6 +103,7 @@ public class GameboardAppstate extends AbstractAppState {
                     );
                     sphereMat.setBoolean("UseMaterialColors", true);
                     sphereMat.setColor("Diffuse", ColorRGBA.Red);
+                    sphereMat.setColor("Ambient", ColorRGBA.Red);
                     sphereMat.setColor("Specular", ColorRGBA.White);
                     sphereMat.setFloat("Shininess", 64f);  // [0,128]
                     geom.setMaterial(sphereMat);
@@ -117,9 +141,9 @@ public class GameboardAppstate extends AbstractAppState {
 
     private Vector3f transformCoordinatesFromServerToClient(EntityUpdate pu) {
         return new Vector3f(
-                pu.getX() * 4.0f - 2.0f,
-                pu.getY() * 4.0f - 2.0f,
-                0.0f
+                pu.getX(),
+                pu.getY(),
+                Z_AXIS_OFFSET
         );
     }
 

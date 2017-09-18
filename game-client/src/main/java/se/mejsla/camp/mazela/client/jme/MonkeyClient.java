@@ -59,8 +59,11 @@ public class MonkeyClient extends SimpleApplication {
         final AppSettings settings = new AppSettings(true);
         settings.setRenderer(AppSettings.JOGL_OPENGL_BACKWARD_COMPATIBLE);
         settings.setAudioRenderer(AppSettings.JOAL);
+        settings.setTitle("Mazela");
+        settings.setWidth(1024);
+        settings.setHeight(768);
         client.setSettings(settings);
-        
+        client.setShowSettings(false);
         client.start();
     }
 
@@ -82,7 +85,6 @@ public class MonkeyClient extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        settings.setRenderer(AppSettings.JOGL_OPENGL_FORWARD_COMPATIBLE);
         initializeNetwork();
 
         this.flyCam.setEnabled(false);
