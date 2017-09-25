@@ -5164,6 +5164,19 @@ public final class MazelaProtocol {
      */
     se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.GameboardUpdateOrBuilder getGameboardUpdateOrBuilder();
 
+    /**
+     * <code>.se.mejsla.camp.mazela.network.common.protos.ClientInput client_input = 6;</code>
+     */
+    boolean hasClientInput();
+    /**
+     * <code>.se.mejsla.camp.mazela.network.common.protos.ClientInput client_input = 6;</code>
+     */
+    se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput getClientInput();
+    /**
+     * <code>.se.mejsla.camp.mazela.network.common.protos.ClientInput client_input = 6;</code>
+     */
+    se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInputOrBuilder getClientInputOrBuilder();
+
     public se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.Envelope.ContentCase getContentCase();
   }
   /**
@@ -5272,6 +5285,20 @@ public final class MazelaProtocol {
               contentCase_ = 5;
               break;
             }
+            case 50: {
+              se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.Builder subBuilder = null;
+              if (contentCase_ == 6) {
+                subBuilder = ((se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput) content_).toBuilder();
+              }
+              content_ =
+                  input.readMessage(se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom((se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput) content_);
+                content_ = subBuilder.buildPartial();
+              }
+              contentCase_ = 6;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -5317,6 +5344,10 @@ public final class MazelaProtocol {
        * <code>GameboardUpdate = 3;</code>
        */
       GameboardUpdate(3),
+      /**
+       * <code>ClientInput = 4;</code>
+       */
+      ClientInput(4),
       UNRECOGNIZED(-1),
       ;
 
@@ -5336,6 +5367,10 @@ public final class MazelaProtocol {
        * <code>GameboardUpdate = 3;</code>
        */
       public static final int GameboardUpdate_VALUE = 3;
+      /**
+       * <code>ClientInput = 4;</code>
+       */
+      public static final int ClientInput_VALUE = 4;
 
 
       public final int getNumber() {
@@ -5360,6 +5395,7 @@ public final class MazelaProtocol {
           case 1: return AuthenticationReply;
           case 2: return JoinPlayer;
           case 3: return GameboardUpdate;
+          case 4: return ClientInput;
           default: return null;
         }
       }
@@ -5420,6 +5456,7 @@ public final class MazelaProtocol {
       AUTHENTICATION_REPLY(3),
       JOIN_PLAYER(4),
       GAMEBOARD_UPDATE(5),
+      CLIENT_INPUT(6),
       CONTENT_NOT_SET(0);
       private final int value;
       private ContentCase(int value) {
@@ -5439,6 +5476,7 @@ public final class MazelaProtocol {
           case 3: return AUTHENTICATION_REPLY;
           case 4: return JOIN_PLAYER;
           case 5: return GAMEBOARD_UPDATE;
+          case 6: return CLIENT_INPUT;
           case 0: return CONTENT_NOT_SET;
           default: return null;
         }
@@ -5574,6 +5612,32 @@ public final class MazelaProtocol {
       return se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.GameboardUpdate.getDefaultInstance();
     }
 
+    public static final int CLIENT_INPUT_FIELD_NUMBER = 6;
+    /**
+     * <code>.se.mejsla.camp.mazela.network.common.protos.ClientInput client_input = 6;</code>
+     */
+    public boolean hasClientInput() {
+      return contentCase_ == 6;
+    }
+    /**
+     * <code>.se.mejsla.camp.mazela.network.common.protos.ClientInput client_input = 6;</code>
+     */
+    public se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput getClientInput() {
+      if (contentCase_ == 6) {
+         return (se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput) content_;
+      }
+      return se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.getDefaultInstance();
+    }
+    /**
+     * <code>.se.mejsla.camp.mazela.network.common.protos.ClientInput client_input = 6;</code>
+     */
+    public se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInputOrBuilder getClientInputOrBuilder() {
+      if (contentCase_ == 6) {
+         return (se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput) content_;
+      }
+      return se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.getDefaultInstance();
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -5600,6 +5664,9 @@ public final class MazelaProtocol {
       }
       if (contentCase_ == 5) {
         output.writeMessage(5, (se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.GameboardUpdate) content_);
+      }
+      if (contentCase_ == 6) {
+        output.writeMessage(6, (se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput) content_);
       }
       unknownFields.writeTo(output);
     }
@@ -5628,6 +5695,10 @@ public final class MazelaProtocol {
       if (contentCase_ == 5) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(5, (se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.GameboardUpdate) content_);
+      }
+      if (contentCase_ == 6) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(6, (se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput) content_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -5666,6 +5737,10 @@ public final class MazelaProtocol {
           result = result && getGameboardUpdate()
               .equals(other.getGameboardUpdate());
           break;
+        case 6:
+          result = result && getClientInput()
+              .equals(other.getClientInput());
+          break;
         case 0:
         default:
       }
@@ -5698,6 +5773,10 @@ public final class MazelaProtocol {
         case 5:
           hash = (37 * hash) + GAMEBOARD_UPDATE_FIELD_NUMBER;
           hash = (53 * hash) + getGameboardUpdate().hashCode();
+          break;
+        case 6:
+          hash = (37 * hash) + CLIENT_INPUT_FIELD_NUMBER;
+          hash = (53 * hash) + getClientInput().hashCode();
           break;
         case 0:
         default:
@@ -5886,6 +5965,13 @@ public final class MazelaProtocol {
             result.content_ = gameboardUpdateBuilder_.build();
           }
         }
+        if (contentCase_ == 6) {
+          if (clientInputBuilder_ == null) {
+            result.content_ = content_;
+          } else {
+            result.content_ = clientInputBuilder_.build();
+          }
+        }
         result.contentCase_ = contentCase_;
         onBuilt();
         return result;
@@ -5946,6 +6032,10 @@ public final class MazelaProtocol {
           }
           case GAMEBOARD_UPDATE: {
             mergeGameboardUpdate(other.getGameboardUpdate());
+            break;
+          }
+          case CLIENT_INPUT: {
+            mergeClientInput(other.getClientInput());
             break;
           }
           case CONTENT_NOT_SET: {
@@ -6581,6 +6671,142 @@ public final class MazelaProtocol {
         onChanged();;
         return gameboardUpdateBuilder_;
       }
+
+      private com.google.protobuf.SingleFieldBuilderV3<
+          se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput, se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.Builder, se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInputOrBuilder> clientInputBuilder_;
+      /**
+       * <code>.se.mejsla.camp.mazela.network.common.protos.ClientInput client_input = 6;</code>
+       */
+      public boolean hasClientInput() {
+        return contentCase_ == 6;
+      }
+      /**
+       * <code>.se.mejsla.camp.mazela.network.common.protos.ClientInput client_input = 6;</code>
+       */
+      public se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput getClientInput() {
+        if (clientInputBuilder_ == null) {
+          if (contentCase_ == 6) {
+            return (se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput) content_;
+          }
+          return se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.getDefaultInstance();
+        } else {
+          if (contentCase_ == 6) {
+            return clientInputBuilder_.getMessage();
+          }
+          return se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>.se.mejsla.camp.mazela.network.common.protos.ClientInput client_input = 6;</code>
+       */
+      public Builder setClientInput(se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput value) {
+        if (clientInputBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          content_ = value;
+          onChanged();
+        } else {
+          clientInputBuilder_.setMessage(value);
+        }
+        contentCase_ = 6;
+        return this;
+      }
+      /**
+       * <code>.se.mejsla.camp.mazela.network.common.protos.ClientInput client_input = 6;</code>
+       */
+      public Builder setClientInput(
+          se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.Builder builderForValue) {
+        if (clientInputBuilder_ == null) {
+          content_ = builderForValue.build();
+          onChanged();
+        } else {
+          clientInputBuilder_.setMessage(builderForValue.build());
+        }
+        contentCase_ = 6;
+        return this;
+      }
+      /**
+       * <code>.se.mejsla.camp.mazela.network.common.protos.ClientInput client_input = 6;</code>
+       */
+      public Builder mergeClientInput(se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput value) {
+        if (clientInputBuilder_ == null) {
+          if (contentCase_ == 6 &&
+              content_ != se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.getDefaultInstance()) {
+            content_ = se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.newBuilder((se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput) content_)
+                .mergeFrom(value).buildPartial();
+          } else {
+            content_ = value;
+          }
+          onChanged();
+        } else {
+          if (contentCase_ == 6) {
+            clientInputBuilder_.mergeFrom(value);
+          }
+          clientInputBuilder_.setMessage(value);
+        }
+        contentCase_ = 6;
+        return this;
+      }
+      /**
+       * <code>.se.mejsla.camp.mazela.network.common.protos.ClientInput client_input = 6;</code>
+       */
+      public Builder clearClientInput() {
+        if (clientInputBuilder_ == null) {
+          if (contentCase_ == 6) {
+            contentCase_ = 0;
+            content_ = null;
+            onChanged();
+          }
+        } else {
+          if (contentCase_ == 6) {
+            contentCase_ = 0;
+            content_ = null;
+          }
+          clientInputBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>.se.mejsla.camp.mazela.network.common.protos.ClientInput client_input = 6;</code>
+       */
+      public se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.Builder getClientInputBuilder() {
+        return getClientInputFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.se.mejsla.camp.mazela.network.common.protos.ClientInput client_input = 6;</code>
+       */
+      public se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInputOrBuilder getClientInputOrBuilder() {
+        if ((contentCase_ == 6) && (clientInputBuilder_ != null)) {
+          return clientInputBuilder_.getMessageOrBuilder();
+        } else {
+          if (contentCase_ == 6) {
+            return (se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput) content_;
+          }
+          return se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>.se.mejsla.camp.mazela.network.common.protos.ClientInput client_input = 6;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput, se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.Builder, se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInputOrBuilder> 
+          getClientInputFieldBuilder() {
+        if (clientInputBuilder_ == null) {
+          if (!(contentCase_ == 6)) {
+            content_ = se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.getDefaultInstance();
+          }
+          clientInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput, se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.Builder, se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInputOrBuilder>(
+                  (se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput) content_,
+                  getParentForChildren(),
+                  isClean());
+          content_ = null;
+        }
+        contentCase_ = 6;
+        onChanged();;
+        return clientInputBuilder_;
+      }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
@@ -6702,7 +6928,7 @@ public final class MazelaProtocol {
       "network.common.protos.GameboardUpdate.Co" +
       "ordinate\022\r\n\005state\030\006 \001(\005\"D\n\013ClientInput\022\n" +
       "\n\002up\030\001 \001(\010\022\014\n\004down\030\002 \001(\010\022\014\n\004left\030\003 \001(\010\022\r" +
-      "\n\005right\030\004 \001(\010\"\304\004\n\010Envelope\022W\n\014message_ty" +
+      "\n\005right\030\004 \001(\010\"\247\005\n\010Envelope\022W\n\014message_ty" +
       "pe\030\001 \001(\0162A.se.mejsla.camp.mazela.network",
       ".common.protos.Envelope.MessageType\022b\n\026a" +
       "uthentication_request\030\002 \001(\0132@.se.mejsla." +
@@ -6714,10 +6940,12 @@ public final class MazelaProtocol {
       "etwork.common.protos.JoinPlayerH\000\022X\n\020gam" +
       "eboard_update\030\005 \001(\0132<.se.mejsla.camp.maz" +
       "ela.network.common.protos.GameboardUpdat",
-      "eH\000\"d\n\013MessageType\022\027\n\023AuthenticateReques" +
-      "t\020\000\022\027\n\023AuthenticationReply\020\001\022\016\n\nJoinPlay" +
-      "er\020\002\022\023\n\017GameboardUpdate\020\003B\t\n\007contentb\006pr" +
-      "oto3"
+      "eH\000\022P\n\014client_input\030\006 \001(\01328.se.mejsla.ca" +
+      "mp.mazela.network.common.protos.ClientIn" +
+      "putH\000\"u\n\013MessageType\022\027\n\023AuthenticateRequ" +
+      "est\020\000\022\027\n\023AuthenticationReply\020\001\022\016\n\nJoinPl" +
+      "ayer\020\002\022\023\n\017GameboardUpdate\020\003\022\017\n\013ClientInp" +
+      "ut\020\004B\t\n\007contentb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -6784,7 +7012,7 @@ public final class MazelaProtocol {
     internal_static_se_mejsla_camp_mazela_network_common_protos_Envelope_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_se_mejsla_camp_mazela_network_common_protos_Envelope_descriptor,
-        new java.lang.String[] { "MessageType", "AuthenticationRequest", "AuthenticationReply", "JoinPlayer", "GameboardUpdate", "Content", });
+        new java.lang.String[] { "MessageType", "AuthenticationRequest", "AuthenticationReply", "JoinPlayer", "GameboardUpdate", "ClientInput", "Content", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

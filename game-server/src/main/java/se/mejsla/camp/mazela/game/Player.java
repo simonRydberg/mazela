@@ -16,9 +16,11 @@
 package se.mejsla.camp.mazela.game;
 
 import com.google.common.base.Preconditions;
-import nu.zoom.corridors.math.XORShiftRandom;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
+import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
 
 /**
  *
@@ -26,18 +28,51 @@ import org.dyn4j.geometry.Vector2;
  */
 public class Player {
 
-    private final XORShiftRandom random = new XORShiftRandom(System.currentTimeMillis());
     private final Body physicsBody;
+    private final AtomicBoolean up = new AtomicBoolean(false);
+    private final AtomicBoolean down = new AtomicBoolean(false);
+    private final AtomicBoolean left = new AtomicBoolean(false);
+    private final AtomicBoolean right = new AtomicBoolean(false);
+    private final AtomicBoolean needsUpdate = new AtomicBoolean(false);
 
     public Player(final Body physicsBody) {
         this.physicsBody = Preconditions.checkNotNull(physicsBody);
     }
 
     public void update(final float tpf) {
-        //this.physicsBody.applyForce(new Vector2((random.unitRandom() / 2) * 200, random.unitRandom() * 200));
+        Vector2 force = new Vector2(0, 0);
+        if (this.needsUpdate.get()) {
+            this.needsUpdate.set(false);
+        }
+        if (this.right.get()) {
+            force.add(tpf, 0);
+        }
+        if (this.left.get()) {
+            force.add(-tpf, 0);
+        }
+        if (this.up.get()) {
+            force.add(0, tpf);
+        }
+        if (this.down.get()) {
+            force.add(0, -tpf);
+        }
+        force.multiply(200);
+        this.physicsBody.applyForce(force);
     }
 
     public Body getPhysicsBody() {
         return physicsBody;
+    }
+
+    public void setInput(
+            final boolean left,
+            final boolean right,
+            final boolean up,
+            final boolean down) {
+        this.up.set(up);
+        this.down.set(down);
+        this.left.set(left);
+        this.right.set(right);
+        this.needsUpdate.set(true);
     }
 }

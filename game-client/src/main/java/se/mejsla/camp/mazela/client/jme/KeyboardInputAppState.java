@@ -78,22 +78,22 @@ public class KeyboardInputAppState extends AbstractAppState {
     public void update(float tpf) {
         if (needsUpdate.get()) {
             final ByteBuffer message = ByteBuffer.wrap(
-                    MazelaProtocol.ClientInput
-                            .newBuilder()
-                            .setDown(this.down.get())
-                            .setUp(this.up.get())
-                            .setLeft(this.left.get())
-                            .setRight(this.right.get())
+                    MazelaProtocol.Envelope.newBuilder()
+                            .setClientInput(MazelaProtocol.ClientInput
+                                    .newBuilder()
+                                    .setDown(this.down.get())
+                                    .setUp(this.up.get())
+                                    .setLeft(this.left.get())
+                                    .setRight(this.right.get()))
+                            .setMessageType(MazelaProtocol.Envelope.MessageType.ClientInput)
                             .build().toByteArray()
             );
-            /*
             try {
                 this.networkClient.sendMessage(message);
                 this.needsUpdate.set(false);
             } catch (OutgoingQueueFullException | NotConnectedException ex) {
                 log.error("Unable to send keyboard message", ex);
             }
-*/
         }
         super.update(tpf);
 

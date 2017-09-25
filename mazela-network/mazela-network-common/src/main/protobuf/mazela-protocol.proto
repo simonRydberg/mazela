@@ -47,6 +47,7 @@ message Envelope {
         AuthenticationReply = 1 ;
         JoinPlayer = 2 ;
         GameboardUpdate = 3 ;
+        ClientInput = 4 ;
     }
     MessageType message_type = 1 ;
     oneof content {
@@ -54,5 +55,6 @@ message Envelope {
         AuthenticationReply authentication_reply = 3 ;
         JoinPlayer join_player = 4 ;
         GameboardUpdate gameboard_update = 5 ;
+        ClientInput client_input = 6 ;
     }
 }

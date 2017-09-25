@@ -22,13 +22,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
-import nu.zoom.corridors.math.Vector2f;
 import nu.zoom.corridors.math.XORShiftRandom;
-import org.dyn4j.collision.Fixture;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Circle;
-import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Rectangle;
 import org.dyn4j.geometry.Vector2;
@@ -36,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.mejsla.camp.mazela.game.physics.PhysicsSpace;
 import se.mejsla.camp.mazela.network.common.ConnectionID;
+import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
 
 /**
  *
@@ -163,5 +161,21 @@ public class GameBoard {
                 .stream()
                 .map(e -> e.getKey())
                 .collect(Collectors.toSet());
+    }
+
+    public void playerInput(
+            final ConnectionID connectionID,
+            final MazelaProtocol.ClientInput clientInput) {
+        if (connectionID != null && clientInput != null) {
+            final Player player = this.players.get(connectionID);
+            if (player != null) {
+                player.setInput(
+                        clientInput.getLeft(),
+                        clientInput.getRight(),
+                        clientInput.getUp(),
+                        clientInput.getDown()
+                );
+            }
+        }
     }
 }

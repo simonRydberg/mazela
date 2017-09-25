@@ -163,6 +163,13 @@ public class ServerService extends AbstractScheduledService {
                             log.debug("Can not join game before authentication: {}", connectionID);
                         }
                     }
+                    case ClientInput: {
+                        this.gameBoard.playerInput(
+                                connectionID,
+                                envelope.getClientInput()
+                        );
+                        break;
+                    }
                 }
             } catch (IllegalArgumentException | NotConnectedException | OutgoingQueueFullException e) {
                 log.error("Unable to parse network message", e);
