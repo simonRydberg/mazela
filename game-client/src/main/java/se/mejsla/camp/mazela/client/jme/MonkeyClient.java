@@ -35,6 +35,7 @@ public class MonkeyClient extends SimpleApplication {
     private GrizzlyNetworkClient networkClient;
     private ProtobufAppState networkAppstate;
     private GameboardAppstate gameboardAppstate;
+    private KeyboardInputAppState keyboardInputAppState;
 
     private final ThreadFactory threadFactory = new ThreadFactory() {
         private long threadNumber = 0;
@@ -55,7 +56,7 @@ public class MonkeyClient extends SimpleApplication {
 
     public static void main(String[] args) {
         final MonkeyClient client = new MonkeyClient();
-        
+
         final AppSettings settings = new AppSettings(true);
         settings.setRenderer(AppSettings.JOGL_OPENGL_BACKWARD_COMPATIBLE);
         settings.setAudioRenderer(AppSettings.JOAL);
@@ -91,10 +92,12 @@ public class MonkeyClient extends SimpleApplication {
         this.gameboardAppstate = new GameboardAppstate();
         this.stateManager.attach(gameboardAppstate);
         this.networkAppstate = new ProtobufAppState(networkClient, gameboardAppstate);
+        this.keyboardInputAppState = new KeyboardInputAppState(inputManager, networkClient);
 
         try {
             this.networkClient.awaitRunning(5, TimeUnit.SECONDS);
             this.stateManager.attach(networkAppstate);
+            this.stateManager.attach(keyboardInputAppState);
         } catch (TimeoutException ex) {
             log.error("Network client did not start in time", ex);
             beginShutdown();

@@ -52,6 +52,7 @@ public class GameboardAppstate extends AbstractAppState {
     private List<EntityUpdate> pendingUpdates = null;
     private Node rootNode;
     private Node entityNode;
+    private KeyboardInputAppState keyboardInputAppState ;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {

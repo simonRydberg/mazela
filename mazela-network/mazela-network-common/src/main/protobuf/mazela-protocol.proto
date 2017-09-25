@@ -34,6 +34,13 @@ message GameboardUpdate {
     repeated EntityUpdate updates = 1 ;
 }
 
+message ClientInput {
+    bool up = 1 ;
+    bool down = 2 ;
+    bool left = 3 ;
+    bool right = 4 ;
+}
+
 message Envelope {
     enum MessageType {
         AuthenticateRequest = 0 ;

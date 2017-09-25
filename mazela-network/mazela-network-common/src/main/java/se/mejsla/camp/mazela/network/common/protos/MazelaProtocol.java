@@ -4458,6 +4458,647 @@ public final class MazelaProtocol {
 
   }
 
+  public interface ClientInputOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:se.mejsla.camp.mazela.network.common.protos.ClientInput)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>bool up = 1;</code>
+     */
+    boolean getUp();
+
+    /**
+     * <code>bool down = 2;</code>
+     */
+    boolean getDown();
+
+    /**
+     * <code>bool left = 3;</code>
+     */
+    boolean getLeft();
+
+    /**
+     * <code>bool right = 4;</code>
+     */
+    boolean getRight();
+  }
+  /**
+   * Protobuf type {@code se.mejsla.camp.mazela.network.common.protos.ClientInput}
+   */
+  public  static final class ClientInput extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:se.mejsla.camp.mazela.network.common.protos.ClientInput)
+      ClientInputOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use ClientInput.newBuilder() to construct.
+    private ClientInput(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private ClientInput() {
+      up_ = false;
+      down_ = false;
+      left_ = false;
+      right_ = false;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ClientInput(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+
+              up_ = input.readBool();
+              break;
+            }
+            case 16: {
+
+              down_ = input.readBool();
+              break;
+            }
+            case 24: {
+
+              left_ = input.readBool();
+              break;
+            }
+            case 32: {
+
+              right_ = input.readBool();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.internal_static_se_mejsla_camp_mazela_network_common_protos_ClientInput_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.internal_static_se_mejsla_camp_mazela_network_common_protos_ClientInput_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.class, se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.Builder.class);
+    }
+
+    public static final int UP_FIELD_NUMBER = 1;
+    private boolean up_;
+    /**
+     * <code>bool up = 1;</code>
+     */
+    public boolean getUp() {
+      return up_;
+    }
+
+    public static final int DOWN_FIELD_NUMBER = 2;
+    private boolean down_;
+    /**
+     * <code>bool down = 2;</code>
+     */
+    public boolean getDown() {
+      return down_;
+    }
+
+    public static final int LEFT_FIELD_NUMBER = 3;
+    private boolean left_;
+    /**
+     * <code>bool left = 3;</code>
+     */
+    public boolean getLeft() {
+      return left_;
+    }
+
+    public static final int RIGHT_FIELD_NUMBER = 4;
+    private boolean right_;
+    /**
+     * <code>bool right = 4;</code>
+     */
+    public boolean getRight() {
+      return right_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (up_ != false) {
+        output.writeBool(1, up_);
+      }
+      if (down_ != false) {
+        output.writeBool(2, down_);
+      }
+      if (left_ != false) {
+        output.writeBool(3, left_);
+      }
+      if (right_ != false) {
+        output.writeBool(4, right_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (up_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(1, up_);
+      }
+      if (down_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(2, down_);
+      }
+      if (left_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(3, left_);
+      }
+      if (right_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(4, right_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput)) {
+        return super.equals(obj);
+      }
+      se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput other = (se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput) obj;
+
+      boolean result = true;
+      result = result && (getUp()
+          == other.getUp());
+      result = result && (getDown()
+          == other.getDown());
+      result = result && (getLeft()
+          == other.getLeft());
+      result = result && (getRight()
+          == other.getRight());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + UP_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getUp());
+      hash = (37 * hash) + DOWN_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getDown());
+      hash = (37 * hash) + LEFT_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getLeft());
+      hash = (37 * hash) + RIGHT_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getRight());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code se.mejsla.camp.mazela.network.common.protos.ClientInput}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:se.mejsla.camp.mazela.network.common.protos.ClientInput)
+        se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInputOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.internal_static_se_mejsla_camp_mazela_network_common_protos_ClientInput_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.internal_static_se_mejsla_camp_mazela_network_common_protos_ClientInput_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.class, se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.Builder.class);
+      }
+
+      // Construct using se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        up_ = false;
+
+        down_ = false;
+
+        left_ = false;
+
+        right_ = false;
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.internal_static_se_mejsla_camp_mazela_network_common_protos_ClientInput_descriptor;
+      }
+
+      public se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput getDefaultInstanceForType() {
+        return se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.getDefaultInstance();
+      }
+
+      public se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput build() {
+        se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput buildPartial() {
+        se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput result = new se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput(this);
+        result.up_ = up_;
+        result.down_ = down_;
+        result.left_ = left_;
+        result.right_ = right_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput) {
+          return mergeFrom((se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput other) {
+        if (other == se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput.getDefaultInstance()) return this;
+        if (other.getUp() != false) {
+          setUp(other.getUp());
+        }
+        if (other.getDown() != false) {
+          setDown(other.getDown());
+        }
+        if (other.getLeft() != false) {
+          setLeft(other.getLeft());
+        }
+        if (other.getRight() != false) {
+          setRight(other.getRight());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private boolean up_ ;
+      /**
+       * <code>bool up = 1;</code>
+       */
+      public boolean getUp() {
+        return up_;
+      }
+      /**
+       * <code>bool up = 1;</code>
+       */
+      public Builder setUp(boolean value) {
+        
+        up_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool up = 1;</code>
+       */
+      public Builder clearUp() {
+        
+        up_ = false;
+        onChanged();
+        return this;
+      }
+
+      private boolean down_ ;
+      /**
+       * <code>bool down = 2;</code>
+       */
+      public boolean getDown() {
+        return down_;
+      }
+      /**
+       * <code>bool down = 2;</code>
+       */
+      public Builder setDown(boolean value) {
+        
+        down_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool down = 2;</code>
+       */
+      public Builder clearDown() {
+        
+        down_ = false;
+        onChanged();
+        return this;
+      }
+
+      private boolean left_ ;
+      /**
+       * <code>bool left = 3;</code>
+       */
+      public boolean getLeft() {
+        return left_;
+      }
+      /**
+       * <code>bool left = 3;</code>
+       */
+      public Builder setLeft(boolean value) {
+        
+        left_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool left = 3;</code>
+       */
+      public Builder clearLeft() {
+        
+        left_ = false;
+        onChanged();
+        return this;
+      }
+
+      private boolean right_ ;
+      /**
+       * <code>bool right = 4;</code>
+       */
+      public boolean getRight() {
+        return right_;
+      }
+      /**
+       * <code>bool right = 4;</code>
+       */
+      public Builder setRight(boolean value) {
+        
+        right_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool right = 4;</code>
+       */
+      public Builder clearRight() {
+        
+        right_ = false;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:se.mejsla.camp.mazela.network.common.protos.ClientInput)
+    }
+
+    // @@protoc_insertion_point(class_scope:se.mejsla.camp.mazela.network.common.protos.ClientInput)
+    private static final se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput();
+    }
+
+    public static se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<ClientInput>
+        PARSER = new com.google.protobuf.AbstractParser<ClientInput>() {
+      public ClientInput parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new ClientInput(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<ClientInput> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ClientInput> getParserForType() {
+      return PARSER;
+    }
+
+    public se.mejsla.camp.mazela.network.common.protos.MazelaProtocol.ClientInput getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface EnvelopeOrBuilder extends
       // @@protoc_insertion_point(interface_extends:se.mejsla.camp.mazela.network.common.protos.Envelope)
       com.google.protobuf.MessageOrBuilder {
@@ -6025,6 +6666,11 @@ public final class MazelaProtocol {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_se_mejsla_camp_mazela_network_common_protos_GameboardUpdate_EntityUpdate_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_se_mejsla_camp_mazela_network_common_protos_ClientInput_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_se_mejsla_camp_mazela_network_common_protos_ClientInput_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_se_mejsla_camp_mazela_network_common_protos_Envelope_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -6054,22 +6700,24 @@ public final class MazelaProtocol {
       ".camp.mazela.network.common.protos.Uuid\022" +
       "W\n\006coords\030\002 \001(\0132G.se.mejsla.camp.mazela." +
       "network.common.protos.GameboardUpdate.Co" +
-      "ordinate\022\r\n\005state\030\006 \001(\005\"\304\004\n\010Envelope\022W\n\014" +
-      "message_type\030\001 \001(\0162A.se.mejsla.camp.maze" +
-      "la.network.common.protos.Envelope.Messag" +
-      "eType\022b\n\026authentication_request\030\002 \001(\0132@.",
-      "se.mejsla.camp.mazela.network.common.pro" +
-      "tos.AuthenticateRequestH\000\022`\n\024authenticat" +
-      "ion_reply\030\003 \001(\0132@.se.mejsla.camp.mazela." +
-      "network.common.protos.AuthenticationRepl" +
-      "yH\000\022N\n\013join_player\030\004 \001(\01327.se.mejsla.cam" +
-      "p.mazela.network.common.protos.JoinPlaye" +
-      "rH\000\022X\n\020gameboard_update\030\005 \001(\0132<.se.mejsl" +
-      "a.camp.mazela.network.common.protos.Game" +
-      "boardUpdateH\000\"d\n\013MessageType\022\027\n\023Authenti" +
-      "cateRequest\020\000\022\027\n\023AuthenticationReply\020\001\022\016",
-      "\n\nJoinPlayer\020\002\022\023\n\017GameboardUpdate\020\003B\t\n\007c" +
-      "ontentb\006proto3"
+      "ordinate\022\r\n\005state\030\006 \001(\005\"D\n\013ClientInput\022\n" +
+      "\n\002up\030\001 \001(\010\022\014\n\004down\030\002 \001(\010\022\014\n\004left\030\003 \001(\010\022\r" +
+      "\n\005right\030\004 \001(\010\"\304\004\n\010Envelope\022W\n\014message_ty" +
+      "pe\030\001 \001(\0162A.se.mejsla.camp.mazela.network",
+      ".common.protos.Envelope.MessageType\022b\n\026a" +
+      "uthentication_request\030\002 \001(\0132@.se.mejsla." +
+      "camp.mazela.network.common.protos.Authen" +
+      "ticateRequestH\000\022`\n\024authentication_reply\030" +
+      "\003 \001(\0132@.se.mejsla.camp.mazela.network.co" +
+      "mmon.protos.AuthenticationReplyH\000\022N\n\013joi" +
+      "n_player\030\004 \001(\01327.se.mejsla.camp.mazela.n" +
+      "etwork.common.protos.JoinPlayerH\000\022X\n\020gam" +
+      "eboard_update\030\005 \001(\0132<.se.mejsla.camp.maz" +
+      "ela.network.common.protos.GameboardUpdat",
+      "eH\000\"d\n\013MessageType\022\027\n\023AuthenticateReques" +
+      "t\020\000\022\027\n\023AuthenticationReply\020\001\022\016\n\nJoinPlay" +
+      "er\020\002\022\023\n\017GameboardUpdate\020\003B\t\n\007contentb\006pr" +
+      "oto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -6125,8 +6773,14 @@ public final class MazelaProtocol {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_se_mejsla_camp_mazela_network_common_protos_GameboardUpdate_EntityUpdate_descriptor,
         new java.lang.String[] { "Uuid", "Coords", "State", });
-    internal_static_se_mejsla_camp_mazela_network_common_protos_Envelope_descriptor =
+    internal_static_se_mejsla_camp_mazela_network_common_protos_ClientInput_descriptor =
       getDescriptor().getMessageTypes().get(5);
+    internal_static_se_mejsla_camp_mazela_network_common_protos_ClientInput_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_se_mejsla_camp_mazela_network_common_protos_ClientInput_descriptor,
+        new java.lang.String[] { "Up", "Down", "Left", "Right", });
+    internal_static_se_mejsla_camp_mazela_network_common_protos_Envelope_descriptor =
+      getDescriptor().getMessageTypes().get(6);
     internal_static_se_mejsla_camp_mazela_network_common_protos_Envelope_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_se_mejsla_camp_mazela_network_common_protos_Envelope_descriptor,
