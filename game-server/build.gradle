@@ -1,0 +1,8 @@
+description = ''
+dependencies {
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile project(':mazela-network:mazela-network-common')
+    compile project(':mazela-network:mazela-network-server')
+    compile group: 'com.google.guava', name: 'guava', version: '23.0'
+    compile group: 'org.dyn4j', name: 'dyn4j', version: '3.2.4'
+}

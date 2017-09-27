@@ -1,0 +1,10 @@
+description = ''
+dependencies {
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile group: 'com.google.guava', name: 'guava', version: '23.0'
+    compile project(':mazela-network:mazela-network-common')
+    compile project(':mazela-network:mazela-network-client')
+    compile group: 'org.jmonkeyengine', name: 'jme3-core', version: '3.1.0-stable'
+    compile group: 'org.jmonkeyengine', name: 'jme3-desktop', version: '3.1.0-stable'
+    compile group: 'org.jmonkeyengine', name: 'jme3-jogl', version: '3.1.0-stable'
+}

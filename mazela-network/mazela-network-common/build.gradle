@@ -1,0 +1,55 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.3'
+    }
+}
+
+apply plugin: 'com.google.protobuf'
+apply plugin: 'idea'
+
+dependencies {
+    compile group: 'com.google.guava', name: 'guava', version: '23.0'
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.4.0'
+    compile group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.4.0'
+}
+
+sourceSets {
+    main {
+        proto {
+            // In addition to the default 'src/main/proto'
+            srcDir 'src/main/protobuf'
+        }
+
+    }
+    test {
+        proto {
+            // In addition to the default 'src/test/proto'
+            srcDir 'src/test/protocolbuffers'
+        }
+    }
+}
+
+protobuf {
+    // Configure the protoc executable
+    generatedFilesBaseDir = "$projectDir/gen"
+    protoc {
+        // Download from repositories
+        artifact = 'com.google.protobuf:protoc:3.4.0'
+    }
+
+}
+
+clean {
+    delete protobuf.generatedFilesBaseDir
+}
+
+idea {
+    module {
+        sourceDirs += file("${protobuf.generatedFilesBaseDir}/main/java");
+        // If you have additional sourceSets and/or codegen plugins, add all of them
+        sourceDirs += file("${protobuf.generatedFilesBaseDir}/main/grpc");
+    }
+}

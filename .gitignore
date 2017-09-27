@@ -30,3 +30,11 @@ hs_err_pid*
 # Editors
 *.swp
 *~
+
+# Intellij
+.idea/
+*.iml
+
+# gradle
+build/
+.gradle/

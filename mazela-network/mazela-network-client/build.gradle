@@ -1,0 +1,7 @@
+description = ''
+dependencies {
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile project(':mazela-network:mazela-network-common')
+    compile group: 'com.google.guava', name: 'guava', version: '23.0'
+    compile group: 'org.glassfish.grizzly', name: 'grizzly-framework', version: '2.4.1'
+}

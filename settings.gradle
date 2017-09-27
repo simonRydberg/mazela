@@ -1,0 +1,14 @@
+rootProject.name = 'mazela-parent'
+include ':mazela-network:mazela-network-common'
+include ':mazela-network:mazela-network-server'
+include ':mazela-network:mazela-network-client'
+include ':mazela-network'
+include ':game-server'
+include ':game-client'
+
+project(':mazela-network:mazela-network-common').projectDir = "$rootDir/mazela-network/mazela-network-common" as File
+project(':mazela-network:mazela-network-server').projectDir = "$rootDir/mazela-network/mazela-network-server" as File
+project(':mazela-network:mazela-network-client').projectDir = "$rootDir/mazela-network/mazela-network-client" as File
+project(':mazela-network').projectDir = "$rootDir/mazela-network" as File
+project(':game-server').projectDir = "$rootDir/game-server" as File
+project(':game-client').projectDir = "$rootDir/game-client" as File
