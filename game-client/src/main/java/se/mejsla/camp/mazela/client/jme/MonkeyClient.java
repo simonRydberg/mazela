@@ -63,6 +63,8 @@ public class MonkeyClient extends SimpleApplication {
         settings.setTitle("Mazela");
         settings.setWidth(1024);
         settings.setHeight(768);
+        settings.setFrameRate(60);
+        settings.setVSync(true);
         client.setSettings(settings);
         client.setShowSettings(false);
         client.start();
