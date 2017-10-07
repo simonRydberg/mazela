@@ -23,6 +23,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
+import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -59,8 +60,8 @@ public class GameboardAppstate extends AbstractAppState {
         SimpleApplication sapp = ((SimpleApplication) app);
         this.rootNode = sapp.getRootNode();
         this.assetManager = sapp.getAssetManager();
-//        this.rootNode.addLight(new DirectionalLight(new Vector3f(0.5f, -1.0f, 1.0f).normalize()));
-        this.rootNode.addLight(new AmbientLight(new ColorRGBA(0.5f, 0.5f, 0.5f, 1.0f)));
+        this.rootNode.addLight(new DirectionalLight(new Vector3f(0.5f, -1.0f, 1.0f).normalize()));
+        this.rootNode.addLight(new AmbientLight(new ColorRGBA(0.1f, 0.1f, 0.1f, 1.0f)));
         this.entityNode = new Node("Entities");
         this.rootNode.attachChild(this.entityNode);
         addHorizontalEdge("top", 9f);
@@ -124,7 +125,6 @@ public class GameboardAppstate extends AbstractAppState {
                         material = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
                         addScoreNode((PlayerEntityUpdate) pu);
                     } else {
-                        log.debug("Creating score node");
                         geometry = new Geometry(
                                 entityUUID.toString() + "-geom",
                                 new Box(0.5f, 0.5f, 1.0f)
@@ -133,6 +133,7 @@ public class GameboardAppstate extends AbstractAppState {
                     }
                     // Get entity color
                     MazelaProtocol.Color color = pu.getColor();
+                    //log.debug("Using color: " + color);
                     ColorRGBA colorRGBA = new ColorRGBA(color.getRed(), color.getGreen(), color.getBlue(), 1f);
                     material.setBoolean("UseMaterialColors", true);
                     material.setColor("Diffuse", colorRGBA);
@@ -142,7 +143,7 @@ public class GameboardAppstate extends AbstractAppState {
                     geometry.setMaterial(material);
                     node = new Node(entityUUID.toString());
                     node.attachChild(geometry);
-                    log.debug("Attaching entity {} node", entityUUID);
+                    //log.debug("Attaching entity {} node", entityUUID);
                     rootNode.attachChild(node);
                     entityNodes.put(entityUUID, node);
                 }
