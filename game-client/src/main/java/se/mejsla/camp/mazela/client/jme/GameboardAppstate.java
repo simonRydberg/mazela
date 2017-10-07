@@ -127,7 +127,7 @@ public class GameboardAppstate extends AbstractAppState {
                         log.debug("Creating score node");
                         geometry = new Geometry(
                                 entityUUID.toString() + "-geom",
-                                new Box(10, 10, 1.0f)
+                                new Box(0.5f, 0.5f, 1.0f)
                         );
                         material = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
                     }
