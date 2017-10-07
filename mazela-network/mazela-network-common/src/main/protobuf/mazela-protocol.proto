@@ -20,7 +20,6 @@ message Color {
 message AuthenticationReply {
     bool authenticated = 1;
     Uuid uuid = 2;
-    Color color = 3;
 }
 
 message JoinPlayer {

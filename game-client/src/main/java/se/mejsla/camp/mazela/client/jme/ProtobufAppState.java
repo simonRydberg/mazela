@@ -125,16 +125,6 @@ public class ProtobufAppState extends AbstractAppState {
                             protocolUuid.getLeastSignificantID()
                     );
                     gameboardAppstate.setPlayerUUID(uuid);
-                    if (authReply.hasColor()) {
-                        gameboardAppstate.setPlayerColor(authReply.getColor());
-                    } else {
-                        gameboardAppstate.setPlayerColor(MazelaProtocol.Color
-                                .newBuilder()
-                                .setRed(255)
-                                .setGreen(255)
-                                .setBlue(255)
-                                .build());
-                    }
                     log.debug("Authentication success: {}", uuid);
                     // Pretend we have some lobby and that the user chooses to join a game.
                     log.debug("Trying to join the game");
