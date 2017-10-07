@@ -209,7 +209,9 @@ public class GameboardAppstate extends AbstractAppState {
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         BitmapText scoreNode = new BitmapText(guiFont, false);
         scoreNode.setSize(1);
-        scoreNode.setColor(ColorRGBA.Cyan);
+        if (entityUpdate.getEntityID().equals(playerUUID)) {
+            scoreNode.setColor(ColorRGBA.Cyan);
+        }
         scoreNode.setText(name + ": " + score);
 
         rootNode.attachChild(scoreNode);

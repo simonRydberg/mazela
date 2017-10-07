@@ -21,11 +21,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.mejsla.camp.mazela.network.client.grizzly.GrizzlyNetworkClient;
 
+import javax.swing.*;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
+ * Main client class.
+ *
+ * Usage: java ... MonkeyClient [server host name] [user name]
  *
  * @author Johan Maasing <johan@zoom.nu>
  */
@@ -38,6 +42,7 @@ public class MonkeyClient extends SimpleApplication {
     private GameboardAppstate gameboardAppstate;
     private KeyboardInputAppState keyboardInputAppState;
     private String serverHostName;
+    private String userName;
 
     private final ThreadFactory threadFactory = new ThreadFactory() {
         private long threadNumber = 0;
@@ -59,6 +64,7 @@ public class MonkeyClient extends SimpleApplication {
     public static void main(String[] args) {
         final MonkeyClient client = new MonkeyClient();
         client.parseArguments(args);
+        client.findUserName();
 
         final AppSettings settings = new AppSettings(true);
         settings.setRenderer(AppSettings.JOGL_OPENGL_BACKWARD_COMPATIBLE);
@@ -73,11 +79,26 @@ public class MonkeyClient extends SimpleApplication {
         client.start();
     }
 
+    private void findUserName() {
+        if (userName == null) {
+            userName = JOptionPane.showInputDialog(
+                    null, "Please enter login name:", "Login", JOptionPane.QUESTION_MESSAGE);
+        }
+        if (userName == null || userName.isEmpty()) {
+            log.warn("Unknown user, exiting...");
+            System.exit(1);
+        }
+        log.debug("User name = {}", userName);
+    }
+
     private void parseArguments(String[] args) {
         if (args.length > 0) {
             serverHostName = args[0];
         } else {
             serverHostName = "127.0.0.1";
+        }
+        if (args.length > 1) {
+            userName = args[1];
         }
     }
 
@@ -104,7 +125,7 @@ public class MonkeyClient extends SimpleApplication {
         this.flyCam.setEnabled(false);
         this.gameboardAppstate = new GameboardAppstate();
         this.stateManager.attach(gameboardAppstate);
-        this.networkAppstate = new ProtobufAppState(serverHostName, networkClient, gameboardAppstate);
+        this.networkAppstate = new ProtobufAppState(userName, serverHostName, networkClient, gameboardAppstate);
         this.keyboardInputAppState = new KeyboardInputAppState(inputManager, networkClient);
 
         try {
