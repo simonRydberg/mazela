@@ -37,6 +37,7 @@ public class MonkeyClient extends SimpleApplication {
     private ProtobufAppState networkAppstate;
     private GameboardAppstate gameboardAppstate;
     private KeyboardInputAppState keyboardInputAppState;
+    private String serverHostName;
 
     private final ThreadFactory threadFactory = new ThreadFactory() {
         private long threadNumber = 0;
@@ -57,6 +58,7 @@ public class MonkeyClient extends SimpleApplication {
 
     public static void main(String[] args) {
         final MonkeyClient client = new MonkeyClient();
+        client.parseArguments(args);
 
         final AppSettings settings = new AppSettings(true);
         settings.setRenderer(AppSettings.JOGL_OPENGL_BACKWARD_COMPATIBLE);
@@ -69,6 +71,14 @@ public class MonkeyClient extends SimpleApplication {
         client.setSettings(settings);
         client.setShowSettings(false);
         client.start();
+    }
+
+    private void parseArguments(String[] args) {
+        if (args.length > 0) {
+            serverHostName = args[0];
+        } else {
+            serverHostName = "127.0.0.1";
+        }
     }
 
     private void initializeNetwork() {
@@ -94,7 +104,7 @@ public class MonkeyClient extends SimpleApplication {
         this.flyCam.setEnabled(false);
         this.gameboardAppstate = new GameboardAppstate();
         this.stateManager.attach(gameboardAppstate);
-        this.networkAppstate = new ProtobufAppState(networkClient, gameboardAppstate);
+        this.networkAppstate = new ProtobufAppState(serverHostName, networkClient, gameboardAppstate);
         this.keyboardInputAppState = new KeyboardInputAppState(inputManager, networkClient);
 
         try {
