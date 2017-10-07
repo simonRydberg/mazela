@@ -11,9 +11,16 @@ message Uuid {
     fixed64 mostSignificantID = 3;
 }
 
+message Color {
+    int32 red = 1;
+    int32 green = 2;
+    int32 blue = 3;
+}
+
 message AuthenticationReply {
     bool authenticated = 1;
     Uuid uuid = 2;
+    Color color = 3;
 }
 
 message JoinPlayer {
