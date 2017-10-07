@@ -48,6 +48,8 @@ public class ProtobufAppState extends AbstractAppState {
     private final GameboardAppstate gameboardAppstate;
     private final String userName;
     private final String serverHostName;
+    private long reconnectionInterval = 500;
+    private long lastConnectionTry = 0;
 
     public ProtobufAppState(String userName, final String serverHostName, final NetworkClient networkClient, final GameboardAppstate gameboardAppstate) {
         this.userName = userName;
@@ -70,8 +72,16 @@ public class ProtobufAppState extends AbstractAppState {
     private void handleNetwork() throws InvalidProtocolBufferException, OutgoingQueueFullException, NotConnectedException {
         if (!networkClient.isConnected()) {
             // Pretend that we got this from the user
-            log.debug("Connecting to server " + serverHostName + ":" + SERVER_PORT);
-            this.networkClient.connect(serverHostName, SERVER_PORT);
+            long now = System.currentTimeMillis();
+            if (lastConnectionTry + reconnectionInterval < now) {
+                lastConnectionTry = now;
+                log.debug("Connecting to server " + serverHostName + ":" + SERVER_PORT);
+                networkClient.connect(serverHostName, SERVER_PORT);
+                if (!networkClient.isConnected()) {
+                    reconnectionInterval *= 2;
+                    log.warn("Failed to connect, trying again in " + reconnectionInterval + " ms");
+                }
+            }
         } else {
             if (!authenticated) {
                 if (!awaitingAuthentication) {
@@ -80,7 +90,7 @@ public class ProtobufAppState extends AbstractAppState {
                         // pretend that we got the authentication info from the user
                         final MazelaProtocol.AuthenticateRequest.Builder authReq
                                 = MazelaProtocol.AuthenticateRequest.newBuilder()
-                                        .setName("foo")
+                                        .setName(userName)
                                         .setPassword("bar");
                         final byte[] messageBytes = MazelaProtocol.Envelope.newBuilder()
                                 .setMessageType(MazelaProtocol.Envelope.MessageType.AuthenticateRequest)

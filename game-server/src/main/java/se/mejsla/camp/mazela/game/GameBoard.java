@@ -114,10 +114,10 @@ public class GameBoard {
         this.physicsSpace.getWorld().addBody(right);
 
         // Adding initial scores
-        addScoreRandomPos(1, createColor(50, 50, 50), 2, 2);
-        addScoreRandomPos(3, createColor(100, 100, 100), 4, 4);
-        addScoreRandomPos(5, createColor(150, 150, 150), 6, 6);
-        addScoreRandomPos(7, createColor(200, 200, 200), 8, 8);
+        addScoreRandomPos(1, createColor(255, 153, 153), 2, 2);
+        addScoreRandomPos(3, createColor(255, 255, 153), 4, 4);
+        addScoreRandomPos(5, createColor(153, 255, 153), 6, 6);
+        addScoreRandomPos(7, createColor(153, 255, 255), 8, 8);
     }
 
     private MazelaProtocol.Color createColor(int r, int g, int b) {

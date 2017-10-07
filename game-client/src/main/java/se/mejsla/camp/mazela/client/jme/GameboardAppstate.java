@@ -133,12 +133,8 @@ public class GameboardAppstate extends AbstractAppState {
                     }
                     // Get entity color
                     MazelaProtocol.Color color = pu.getColor();
-                    log.debug("Using color: " + color);
-                    ColorRGBA colorRGBA = new ColorRGBA(
-                            ((float)color.getRed()/255.0f),
-                            ((float)color.getGreen()/255.0f),
-                            ((float)color.getBlue()/255.0f),
-                            1f);
+                    //log.debug("Using color: " + color);
+                    ColorRGBA colorRGBA = new ColorRGBA(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, 1f);
                     material.setBoolean("UseMaterialColors", true);
                     material.setColor("Diffuse", colorRGBA);
                     material.setColor("Ambient", colorRGBA);
