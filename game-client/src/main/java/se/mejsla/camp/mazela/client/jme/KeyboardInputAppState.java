@@ -23,14 +23,15 @@ import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
-import java.nio.ByteBuffer;
-import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.mejsla.camp.mazela.network.client.NetworkClient;
 import se.mejsla.camp.mazela.network.common.NotConnectedException;
 import se.mejsla.camp.mazela.network.common.OutgoingQueueFullException;
 import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
+
+import java.nio.ByteBuffer;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  *
@@ -103,7 +104,7 @@ public class KeyboardInputAppState extends AbstractAppState {
 
         @Override
         public void onAnalog(final String name, final float value, final float tpf) {
-            log.debug("Analog input: {}, {}, {}", name, value, tpf);
+//            log.debug("Analog input: {}, {}, {}", name, value, tpf);
             left.set(false);
             right.set(false);
             up.set(false);
@@ -127,6 +128,5 @@ public class KeyboardInputAppState extends AbstractAppState {
                     break;
             }
         }
-
     }
 }

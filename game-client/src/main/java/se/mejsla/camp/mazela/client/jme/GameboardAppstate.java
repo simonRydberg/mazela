@@ -59,10 +59,10 @@ public class GameboardAppstate extends AbstractAppState {
         this.rootNode.addLight(new AmbientLight(new ColorRGBA(0.1f, 0.1f, 0.1f, 1.0f)));
         this.entityNode = new Node("Entities");
         this.rootNode.attachChild(this.entityNode);
-        addHorizontalEdge("top", 6f);
-        addHorizontalEdge("bottom", -6f);
-        addVerticalEdge("left", -6f);
-        addVerticalEdge("right", 6f);
+        addHorizontalEdge("top", 9f);
+        addHorizontalEdge("bottom", -9f);
+        addVerticalEdge("left", -9f);
+        addVerticalEdge("right", 9f);
         super.initialize(stateManager, app);
     }
 
