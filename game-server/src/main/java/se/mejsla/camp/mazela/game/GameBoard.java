@@ -109,10 +109,10 @@ public class GameBoard {
         this.physicsSpace.getWorld().addBody(right);
 
         // Adding initial scores
-        addScoreRandomPos(1, createColor(50, 50, 50));
-        addScoreRandomPos(3, createColor(100, 100, 100));
-        addScoreRandomPos(5, createColor(150, 150, 150));
-        addScoreRandomPos(7, createColor(200, 200, 200));
+        addScoreRandomPos(1, createColor(50, 50, 50), 2, 2);
+        addScoreRandomPos(3, createColor(100, 100, 100), 4, 4);
+        addScoreRandomPos(5, createColor(150, 150, 150), 6, 6);
+        addScoreRandomPos(7, createColor(200, 200, 200), 8, 8);
     }
 
     private MazelaProtocol.Color createColor(int r, int g, int b) {
@@ -158,20 +158,29 @@ public class GameBoard {
         this.pendingPlayerAdds.clear();
     }
 
-    private void addScoreRandomPos(int score, MazelaProtocol.Color color) {
+    private void addScoreRandomPos(int score, MazelaProtocol.Color color, double initialX, double initialY) {
         final Body body = new Body();
-        final BodyFixture bodyFixture = new BodyFixture(new Circle(1.0));
+        final BodyFixture bodyFixture = new BodyFixture(new Circle(0.5f));
         bodyFixture.setRestitution(BOUNCYNESS);
         body.addFixture(bodyFixture);
         body.setMass(MassType.NORMAL);
-        double initialX = this.fastRandom.unitRandom() * PLAYER_INITAL_AREA_WIDTH - (PLAYER_INITAL_AREA_WIDTH / 2);
-        double initialY = this.fastRandom.unitRandom() * PLAYER_INITAL_AREA_HEIGHT - (PLAYER_INITAL_AREA_HEIGHT / 2);
+//        double initialX = this.fastRandom.unitRandom() * PLAYER_INITAL_AREA_WIDTH;
+//        double initialY = this.fastRandom.unitRandom() * PLAYER_INITAL_AREA_HEIGHT;
         body.getTransform().translate(initialX, initialY);
         this.physicsSpace.getWorld().addBody(body);
         Score scoreModel = new Score(body, score, color);
         body.setUserData(scoreModel);
         this.gameModels.add(scoreModel);
         log.debug("Adding score {} at '{}-{}'to the board", score, initialX, initialY);
+    }
+
+    private void removeAndLayoutNew(Score score) {
+        double playerInitalAreaWidth = PLAYER_INITAL_AREA_WIDTH - 2;
+        double initialX = this.fastRandom.unitRandom() * playerInitalAreaWidth - (playerInitalAreaWidth / 2);
+        double playerInitalAreaHeight = PLAYER_INITAL_AREA_HEIGHT - 2;
+        double initialY = this.fastRandom.unitRandom() * playerInitalAreaHeight - (playerInitalAreaHeight / 2);
+        gameModels.remove(score);
+        addScoreRandomPos(score.getScore(), score.getColor(), initialX, initialY);
     }
 
     private void removePendingPlayers() {
@@ -278,7 +287,10 @@ public class GameBoard {
 
             player.addScore(score.getScore());
             gameBoard.physicsSpace.getWorld().removeBody(scoreBody);
+            gameBoard.removeAndLayoutNew(score);
             return true;
         }
     }
+
+
 }

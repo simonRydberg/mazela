@@ -71,6 +71,7 @@ public abstract class Encoder {
                         .newBuilder()
                         .setEntityType(MazelaProtocol.GameboardUpdate.EntityUpdate.EntityType.ScoreEntity)
                         .setScoreEntity(MazelaProtocol.ScoreEntity.newBuilder()
+                                .setUuid(uuid)
                                 .setScore(score.getScore())
                                 .setCoords(coordinate)
                                 .setColor(score.getColor())
