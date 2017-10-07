@@ -104,6 +104,10 @@ public class KeyboardInputAppState extends AbstractAppState {
         @Override
         public void onAnalog(final String name, final float value, final float tpf) {
             log.debug("Analog input: {}, {}, {}", name, value, tpf);
+            left.set(false);
+            right.set(false);
+            up.set(false);
+            down.set(false);
             switch (name) {
                 case "Left":
                     left.set(true);
