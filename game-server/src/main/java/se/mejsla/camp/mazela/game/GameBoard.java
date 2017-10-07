@@ -16,12 +16,6 @@
 package se.mejsla.camp.mazela.game;
 
 import com.google.common.base.Preconditions;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 import nu.zoom.corridors.math.XORShiftRandom;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
@@ -35,8 +29,14 @@ import se.mejsla.camp.mazela.game.physics.PhysicsSpace;
 import se.mejsla.camp.mazela.network.common.ConnectionID;
 import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
+
 /**
- *
  * @author Johan Maasing <johan@zoom.nu>
  */
 public class GameBoard {
@@ -60,12 +60,12 @@ public class GameBoard {
     public GameBoard() {
         this.pendingPlayerDeletes = new CopyOnWriteArrayList<>();
         this.pendingPlayerAdds = new CopyOnWriteArrayList<>();
+        physicsSpace.getWorld().setGravity(new Vector2(0, 0));
         setupEdges();
     }
 
     private void setupEdges() {
-        final Rectangle horizRectangle
-                = new Rectangle(PLAYER_INITAL_AREA_WIDTH + 2, 1.0);
+        final Rectangle horizRectangle = new Rectangle(PLAYER_INITAL_AREA_WIDTH + 2, 1.0);
 
         final Body top = new Body();
         final BodyFixture topFixture = new BodyFixture(horizRectangle);
