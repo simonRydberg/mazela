@@ -180,7 +180,8 @@ public class ServerService extends AbstractScheduledService {
                     }
                     case JoinPlayer: {
                         if (this.authenticatedConnections.contains(connectionID)) {
-                            this.gameBoard.addPlayer(connectionID);
+                            MazelaProtocol.JoinPlayer joinPlayer = envelope.getJoinPlayer();
+                            this.gameBoard.addPlayer(connectionID, joinPlayer.getNickname());
                         } else {
                             log.debug("Can not join game before authentication: {}", connectionID);
                         }

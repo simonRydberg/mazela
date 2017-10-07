@@ -60,8 +60,13 @@ public class GameBoard {
     private final ConcurrentHashMap<ConnectionID, Player> players = new ConcurrentHashMap<>();
     private final List<GameModel> gameModels = new ArrayList<>();
 
-    private final CopyOnWriteArrayList<ConnectionID> pendingPlayerAdds;
+    private final CopyOnWriteArrayList<AddingPlayer> pendingPlayerAdds;
     private final CopyOnWriteArrayList<ConnectionID> pendingPlayerDeletes;
+
+    private class AddingPlayer{
+        public ConnectionID connectionID;
+        public String name;
+    }
 
     public GameBoard() {
         this.pendingPlayerDeletes = new CopyOnWriteArrayList<>();
@@ -123,9 +128,12 @@ public class GameBoard {
                 .build();
     }
 
-    public void addPlayer(ConnectionID connectionID) {
+    public void addPlayer(ConnectionID connectionID, String nickname) {
         if (connectionID != null) {
-            this.pendingPlayerAdds.add(connectionID);
+            AddingPlayer addingPlayer = new AddingPlayer();
+            addingPlayer.connectionID = connectionID;
+            addingPlayer.name = nickname;
+            this.pendingPlayerAdds.add(addingPlayer);
         }
 
     }
@@ -138,9 +146,9 @@ public class GameBoard {
     }
 
     private void addPendingPlayers() {
-        for (ConnectionID connectionID : this.pendingPlayerAdds) {
-            this.players.computeIfAbsent(Preconditions.checkNotNull(connectionID), c -> {
-                log.debug("Adding player {} to the board", connectionID);
+        for (AddingPlayer addingPlayer : this.pendingPlayerAdds) {
+            this.players.computeIfAbsent(Preconditions.checkNotNull(addingPlayer.connectionID), c -> {
+                log.debug("Adding player {} to the board", addingPlayer.connectionID);
                 final Body body = new Body();
                 final BodyFixture bodyFixture = new BodyFixture(new Circle(1.0));
                 bodyFixture.setRestitution(BOUNCYNESS);
@@ -150,7 +158,8 @@ public class GameBoard {
                 double initialY = (PLAYER_INITAL_AREA_HEIGHT / 2) - 1.0;
                 body.getTransform().translate(initialX, initialY);
                 this.physicsSpace.getWorld().addBody(body);
-                Player player = new Player(connectionID.getUuid(), body);
+                Player player = new Player(addingPlayer.connectionID.getUuid(), body);
+                player.setName(addingPlayer.name);
                 body.setUserData(player);
                 return player;
             });
