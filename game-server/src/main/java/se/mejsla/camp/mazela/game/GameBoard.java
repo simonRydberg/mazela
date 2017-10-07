@@ -201,7 +201,6 @@ public class GameBoard {
         final ArrayList<EntityUpdate> result = new ArrayList<>();
         players.forEach((id, player) -> {
             Vector2 position = player.getPhysicsBody().getWorldCenter();
-            log.debug("Player: " + position);
             result.add(
                     new EntityUpdate(
                             id.getUuid(),
@@ -212,7 +211,6 @@ public class GameBoard {
         });
         gameModels.forEach(model -> {
             Vector2 position = model.getPhysicsBody().getWorldCenter();
-            log.debug("GameModel: " + position);
             result.add(
                     new EntityUpdate(
                             model.getUuid(),
