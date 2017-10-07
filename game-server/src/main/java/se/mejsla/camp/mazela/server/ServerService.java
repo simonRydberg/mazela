@@ -19,8 +19,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.AbstractScheduledService;
 import com.google.protobuf.InvalidProtocolBufferException;
 import java.nio.ByteBuffer;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -54,6 +53,13 @@ public class ServerService extends AbstractScheduledService {
     private final GameBoard gameBoard;
     private final CopyOnWriteArrayList<ConnectionID> authenticatedConnections
             = new CopyOnWriteArrayList<>();
+
+    private final Map<UUID, MazelaProtocol.Color> colorForPlayer = new HashMap<>();
+    private final List<MazelaProtocol.Color> freeColors = Arrays.asList(
+             MazelaProtocol.Color.newBuilder().setBlue(255).build(),
+             MazelaProtocol.Color.newBuilder().setRed(255).build(),
+             MazelaProtocol.Color.newBuilder().setGreen(255).build()
+    );
 
     public ServerService(
             final NetworkServer networkServer,
@@ -137,11 +143,16 @@ public class ServerService extends AbstractScheduledService {
                                             .setMostSignificantID(result.getMostSignificantBits())
                                             .build()
                             );
-                            log.debug("Authentication success for connection: {}", result, connectionID);
+                            MazelaProtocol.Color color = freeColors.remove(0);
+                            replyBuilder.setColor(color);
+                            colorForPlayer.put(result, color);
+                            log.debug("Authentication success for connection: {}, with color: {}", result, color);
                             this.authenticatedConnections.add(connectionID);
+
                         } else {
                             log.debug("Authentication failed for connection: {}", connectionID);
                             replyBuilder.setAuthenticated(false);
+
                         }
                         networkServer.sendMessage(
                                 ByteBuffer.wrap(
