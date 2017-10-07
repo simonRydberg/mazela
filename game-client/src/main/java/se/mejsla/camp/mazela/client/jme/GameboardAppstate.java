@@ -120,14 +120,9 @@ public class GameboardAppstate extends AbstractAppState {
                             assetManager,
                             "Common/MatDefs/Light/Lighting.j3md"
                     );
-                    ColorRGBA colorRGBA;
-                    if (entityUUID.equals(playerUUID)) {
-                        // Player being created
-                        colorRGBA = new ColorRGBA(playerColor.getRed(), playerColor.getGreen(), playerColor.getBlue(), 1f);
-                    } else {
-                        // NPC being created
-                        colorRGBA = ColorRGBA.Red;
-                    }
+                    // Get entity color
+                    MazelaProtocol.Color color = pu.getColor();
+                    ColorRGBA colorRGBA = new ColorRGBA(color.getRed(), color.getGreen(), color.getBlue(), 1f);
                     sphereMat.setBoolean("UseMaterialColors", true);
                     sphereMat.setColor("Diffuse", colorRGBA);
                     sphereMat.setColor("Ambient", colorRGBA);
