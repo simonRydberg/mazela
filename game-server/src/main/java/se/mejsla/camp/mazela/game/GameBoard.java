@@ -194,8 +194,7 @@ public class GameBoard {
 
     private void removePendingPlayers() {
         for (ConnectionID connectionID : this.pendingPlayerDeletes) {
-            final Player remove
-                    = this.players.remove(Preconditions.checkNotNull(connectionID));
+            final Player remove = this.players.remove(Preconditions.checkNotNull(connectionID));
             Body physicsBody = remove.getPhysicsBody();
             if (physicsBody != null) {
                 this.physicsSpace.getWorld().removeBody(physicsBody);
