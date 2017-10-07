@@ -152,7 +152,6 @@ public class ServerService extends AbstractScheduledService {
                                             .build()
                             );
                             MazelaProtocol.Color color = freeColors.remove(0);
-                            replyBuilder.setColor(color);
                             colorForPlayer.put(connectionID.getUuid(), color);
                             log.debug("Authentication success for connection: {}, with color: {}", result, color);
                             this.authenticatedConnections.add(connectionID);

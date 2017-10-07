@@ -20,6 +20,8 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -43,13 +45,13 @@ public class GameboardAppstate extends AbstractAppState {
 
     private final float Z_AXIS_OFFSET = -40.0f;
     private final Logger log = LoggerFactory.getLogger(getClass());
-    private final HashMap<UUID, Node> entityNodes = new HashMap<>();
+    private final Map<UUID, Node> entityNodes = new HashMap<>();
+    private final Map<UUID, Node> scoreNodes = new HashMap<>();
     private AssetManager assetManager;
     private List<EntityUpdate> pendingUpdates = null;
     private Node rootNode;
     private Node entityNode;
     private KeyboardInputAppState keyboardInputAppState ;
-    private MazelaProtocol.Color playerColor;
     private UUID playerUUID;
 
     @Override
@@ -120,6 +122,7 @@ public class GameboardAppstate extends AbstractAppState {
                                 new Sphere(32, 32, 1.0f)
                         );
                         material = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
+                        addScoreNode((PlayerEntityUpdate) pu);
                     } else {
                         log.debug("Creating score node");
                         geometry = new Geometry(
@@ -146,6 +149,11 @@ public class GameboardAppstate extends AbstractAppState {
                 node.setLocalTranslation(transformCoordinatesFromServerToClient(pu));
 
                 updatedEntities.add(entityUUID);
+
+                // If player, also update score text
+                if (pu instanceof PlayerEntityUpdate) {
+                    updateScoreNodeText((PlayerEntityUpdate) pu);
+                }
             }
 
             // remove entities that was not included in the update
@@ -155,14 +163,57 @@ public class GameboardAppstate extends AbstractAppState {
                     .filter(knownEntityUUID -> !updatedEntities.contains(knownEntityUUID))
                     .collect(Collectors.toSet());
             entitiesToRemove.forEach(e -> {
-                final Node nodeToRemove = entityNodes.remove(e);
+                Node nodeToRemove = entityNodes.remove(e);
+                if (nodeToRemove != null) {
+                    nodeToRemove.detachAllChildren();
+                    this.entityNode.detachChild(nodeToRemove);
+                }
+                // Also remove score node
+                nodeToRemove = scoreNodes.remove(e);
                 if (nodeToRemove != null) {
                     nodeToRemove.detachAllChildren();
                     this.entityNode.detachChild(nodeToRemove);
                 }
             });
             pendingUpdates = null;
+
+            // Now that we know which players are left, update positions for all score nodes
+            updateScoreNodePositions();
         }
+    }
+
+    private void updateScoreNodePositions() {
+        List<Node> nodes = new ArrayList<>(scoreNodes.values());
+        // Sort players in name order
+        nodes.sort(new BitmapTextComparator());
+        for (int i = 0; i < nodes.size(); i++) {
+            Node node = nodes.get(i);
+            node.setLocalTranslation(-27, 20 - i * 2, Z_AXIS_OFFSET);
+        }
+    }
+
+    private void updateScoreNodeText(PlayerEntityUpdate entityUpdate) {
+        UUID entityID = entityUpdate.getEntityID();
+
+        String name = entityUpdate.getName();
+        int score = entityUpdate.getScore();
+
+        BitmapText scoreNode = (BitmapText) scoreNodes.get(entityID);
+        scoreNode.setText(name + ": " + score);
+    }
+
+    private void addScoreNode(PlayerEntityUpdate entityUpdate) {
+        String name = entityUpdate.getName();
+        int score = entityUpdate.getScore();
+
+        BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+        BitmapText scoreNode = new BitmapText(guiFont, false);
+        scoreNode.setSize(1);
+        scoreNode.setColor(ColorRGBA.Cyan);
+        scoreNode.setText(name + ": " + score);
+
+        rootNode.attachChild(scoreNode);
+        scoreNodes.put(entityUpdate.getEntityID(), scoreNode);
     }
 
     public void setPendingUpdates(final List<EntityUpdate> updates) {
@@ -177,11 +228,16 @@ public class GameboardAppstate extends AbstractAppState {
         );
     }
 
-    public void setPlayerColor(MazelaProtocol.Color playerColor) {
-        this.playerColor = playerColor;
+    public void setPlayerUUID(UUID uuid) {
+        this.playerUUID = uuid;
     }
 
-    public void setPlayerUUID(UUID playerUUID) {
-        this.playerUUID = playerUUID;
+    private static class BitmapTextComparator implements Comparator<Node> {
+        @Override
+        public int compare(Node node1, Node node2) {
+            BitmapText text1 = (BitmapText) node1;
+            BitmapText text2 = (BitmapText) node2;
+            return text1.getText().compareTo(text2.getText());
+        }
     }
 }
