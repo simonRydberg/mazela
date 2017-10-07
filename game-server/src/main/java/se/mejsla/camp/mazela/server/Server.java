@@ -15,15 +15,16 @@
  */
 package se.mejsla.camp.mazela.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import se.mejsla.camp.mazela.network.server.grizzly.GrizzlyNetworkServer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import se.mejsla.camp.mazela.network.server.grizzly.GrizzlyNetworkServer;
 
 /**
  *
@@ -40,9 +41,10 @@ public class Server {
         public Thread newThread(Runnable r) {
             final String threadName = "ServerService-" + threadNumber++;
             log.debug("Allocating new thread: " + threadName);
-            Thread t = new Thread(threadGroup, r, threadName);
-            t.setDaemon(true);
-            return t;
+            Thread thread = new Thread(threadGroup, r, threadName);
+            thread.setDaemon(true);
+            thread.setUncaughtExceptionHandler((t, e) -> System.err.println("Uncaught exception in thread " + t + ": " + e));
+            return thread;
         }
     };
     private GrizzlyNetworkServer grizzlyNetworkServer;

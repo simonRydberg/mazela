@@ -30,6 +30,7 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -48,6 +49,8 @@ public class GameboardAppstate extends AbstractAppState {
     private Node rootNode;
     private Node entityNode;
     private KeyboardInputAppState keyboardInputAppState ;
+    private MazelaProtocol.Color playerColor;
+    private UUID playerUUID;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -115,9 +118,17 @@ public class GameboardAppstate extends AbstractAppState {
                             assetManager,
                             "Common/MatDefs/Light/Lighting.j3md"
                     );
+                    ColorRGBA colorRGBA;
+                    if (entityUUID.equals(playerUUID)) {
+                        // Player being created
+                        colorRGBA = new ColorRGBA(playerColor.getRed(), playerColor.getGreen(), playerColor.getBlue(), 1f);
+                    } else {
+                        // NPC being created
+                        colorRGBA = ColorRGBA.Red;
+                    }
                     sphereMat.setBoolean("UseMaterialColors", true);
-                    sphereMat.setColor("Diffuse", ColorRGBA.Red);
-                    sphereMat.setColor("Ambient", ColorRGBA.Red);
+                    sphereMat.setColor("Diffuse", colorRGBA);
+                    sphereMat.setColor("Ambient", colorRGBA);
                     sphereMat.setColor("Specular", ColorRGBA.White);
                     sphereMat.setFloat("Shininess", 64f);  // [0,128]
                     geom.setMaterial(sphereMat);
@@ -161,4 +172,11 @@ public class GameboardAppstate extends AbstractAppState {
         );
     }
 
+    public void setPlayerColor(MazelaProtocol.Color playerColor) {
+        this.playerColor = playerColor;
+    }
+
+    public void setPlayerUUID(UUID playerUUID) {
+        this.playerUUID = playerUUID;
+    }
 }
