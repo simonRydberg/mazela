@@ -65,8 +65,7 @@ public class ServerFilter extends BaseFilter {
             final ByteBuffer messageData = ByteBuffer.allocate(remaining);
             buffer.get(messageData);
             messageData.flip();
-            final ConnectionID connectionID
-                    = CONNECTION_ATTRIBUTE.get(ctx.getConnection());
+            final ConnectionID connectionID = CONNECTION_ATTRIBUTE.get(ctx.getConnection());
             if (connectionID == null) {
                 log.error("Connection read but connection is not assigned an ID");
                 return ctx.getStopAction();

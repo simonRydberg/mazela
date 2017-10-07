@@ -135,69 +135,77 @@ public class ServerService extends AbstractScheduledService {
             try {
                 final ConnectionID connectionID = incomingMessage.getConnectionID();
                 final ByteBuffer messageData = incomingMessage.getData();
-                final MazelaProtocol.Envelope envelope
-                        = MazelaProtocol.Envelope.parseFrom(messageData);
-                switch (envelope.getMessageType()) {
-                    case AuthenticateRequest: {
-                        final MazelaProtocol.AuthenticateRequest req = envelope.getAuthenticationRequest();
-                        // Pretend we are looking up the user record
-                        final String username = req.getName();
-                        final String password = req.getPassword();
-                        final MazelaProtocol.AuthenticationReply.Builder replyBuilder
-                                = MazelaProtocol.AuthenticationReply.newBuilder();
-                        if (password != null && password.length() > 0 && username != null && username.length() > 0) {
-                            final UUID result = connectionID.getUuid();
-                            replyBuilder.setAuthenticated(true);
-                            replyBuilder.setUuid(
-                                    Uuid
-                                            .newBuilder()
-                                            .setLeastSignificantID(result.getLeastSignificantBits())
-                                            .setMostSignificantID(result.getMostSignificantBits())
-                                            .build()
-                            );
-                            MazelaProtocol.Color color = freeColors.remove(0);
-                            colorForPlayer.put(connectionID.getUuid(), color);
-                            log.debug("Authentication success for connection: {}, with color: {}", result, color);
-                            this.authenticatedConnections.add(connectionID);
+                MazelaProtocol.Envelope envelope = null;
+                try {
+                    envelope = MazelaProtocol.Envelope.parseFrom(messageData);
+                } catch (InvalidProtocolBufferException e) {
+                    e.printStackTrace();
+                }
+                if (envelope != null) {
 
-                        } else {
-                            log.debug("Authentication failed for connection: {}", connectionID);
-                            replyBuilder.setAuthenticated(false);
-
-                        }
-                        networkServer.sendMessage(
-                                ByteBuffer.wrap(
-                                        MazelaProtocol.Envelope
+                    switch (envelope.getMessageType()) {
+                        case AuthenticateRequest: {
+                            final MazelaProtocol.AuthenticateRequest req = envelope.getAuthenticationRequest();
+                            // Pretend we are looking up the user record
+                            final String username = req.getName();
+                            final String password = req.getPassword();
+                            final MazelaProtocol.AuthenticationReply.Builder replyBuilder
+                                    = MazelaProtocol.AuthenticationReply.newBuilder();
+                            if (password != null && password.length() > 0 && username != null && username.length() > 0) {
+                                final UUID result = connectionID.getUuid();
+                                replyBuilder.setAuthenticated(true);
+                                replyBuilder.setUuid(
+                                        Uuid
                                                 .newBuilder()
-                                                .setMessageType(MazelaProtocol.Envelope.MessageType.AuthenticationReply)
-                                                .setAuthenticationReply(replyBuilder.build())
+                                                .setLeastSignificantID(result.getLeastSignificantBits())
+                                                .setMostSignificantID(result.getMostSignificantBits())
                                                 .build()
-                                                .toByteArray()
-                                ),
-                                connectionID);
+                                );
+                                MazelaProtocol.Color color = freeColors.remove(0);
+                                colorForPlayer.put(connectionID.getUuid(), color);
+                                log.debug("Authentication success for connection: {}, with color: {}", result, color);
+                                this.authenticatedConnections.add(connectionID);
 
-                        break;
-                    }
-                    case JoinPlayer: {
-                        if (this.authenticatedConnections.contains(connectionID)) {
-                            MazelaProtocol.JoinPlayer joinPlayer = envelope.getJoinPlayer();
-                            this.gameBoard.addPlayer(connectionID, joinPlayer.getNickname());
-                        } else {
-                            log.debug("Can not join game before authentication: {}", connectionID);
+                            } else {
+                                log.debug("Authentication failed for connection: {}", connectionID);
+                                replyBuilder.setAuthenticated(false);
+
+                            }
+                            networkServer.sendMessage(
+                                    ByteBuffer.wrap(
+                                            MazelaProtocol.Envelope
+                                                    .newBuilder()
+                                                    .setMessageType(MazelaProtocol.Envelope.MessageType.AuthenticationReply)
+                                                    .setAuthenticationReply(replyBuilder.build())
+                                                    .build()
+                                                    .toByteArray()
+                                    ),
+                                    connectionID);
+
+                            break;
                         }
-                    }
-                    case ClientInput: {
-                        this.gameBoard.playerInput(
-                                connectionID,
-                                envelope.getClientInput()
-                        );
-                        break;
+                        case JoinPlayer: {
+                            if (this.authenticatedConnections.contains(connectionID)) {
+                                MazelaProtocol.JoinPlayer joinPlayer = envelope.getJoinPlayer();
+                                this.gameBoard.addPlayer(connectionID, joinPlayer.getNickname());
+                            } else {
+                                log.debug("Can not join game before authentication: {}", connectionID);
+                            }
+                        }
+                        case ClientInput: {
+                            this.gameBoard.playerInput(
+                                    connectionID,
+                                    envelope.getClientInput()
+                            );
+                            break;
+                        }
                     }
                 }
+
             } catch (IllegalArgumentException | NotConnectedException | OutgoingQueueFullException e) {
                 log.error("Unable to parse network message", e);
-            } catch (InvalidProtocolBufferException ex) {
-                java.util.logging.Logger.getLogger(ServerService.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (InvalidProtocolBufferException ex) {
+//                java.util.logging.Logger.getLogger(ServerService.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception e) {
                 e.printStackTrace();
             }

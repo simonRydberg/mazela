@@ -61,7 +61,7 @@ public class GameboardAppstate extends AbstractAppState {
         this.rootNode = sapp.getRootNode();
         this.assetManager = sapp.getAssetManager();
         this.rootNode.addLight(new DirectionalLight(new Vector3f(0.5f, -1.0f, 1.0f).normalize()));
-        this.rootNode.addLight(new AmbientLight(new ColorRGBA(0.1f, 0.1f, 0.1f, 1.0f)));
+        this.rootNode.addLight(new AmbientLight(new ColorRGBA(0.5f, 0.5f, 0.5f, 1.0f)));
         this.entityNode = new Node("Entities");
         this.rootNode.attachChild(this.entityNode);
         addHorizontalEdge("top", 9f);
@@ -133,8 +133,12 @@ public class GameboardAppstate extends AbstractAppState {
                     }
                     // Get entity color
                     MazelaProtocol.Color color = pu.getColor();
-                    //log.debug("Using color: " + color);
-                    ColorRGBA colorRGBA = new ColorRGBA(color.getRed(), color.getGreen(), color.getBlue(), 1f);
+                    log.debug("Using color: " + color);
+                    ColorRGBA colorRGBA = new ColorRGBA(
+                            ((float)color.getRed()/255.0f),
+                            ((float)color.getGreen()/255.0f),
+                            ((float)color.getBlue()/255.0f),
+                            1f);
                     material.setBoolean("UseMaterialColors", true);
                     material.setColor("Diffuse", colorRGBA);
                     material.setColor("Ambient", colorRGBA);
