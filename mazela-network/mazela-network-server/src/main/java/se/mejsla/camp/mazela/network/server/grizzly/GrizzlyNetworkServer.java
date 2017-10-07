@@ -201,8 +201,8 @@ public class GrizzlyNetworkServer extends AbstractService implements NetworkServ
             grizzlyBuffer.putInt(MessageUtilities.getMagicMarker());
             grizzlyBuffer.put(data);
             grizzlyBuffer.flip();
-            final OutgoingMessage message
-                    = new OutgoingMessage(connection, grizzlyBuffer);
+            data.flip();
+            final OutgoingMessage message = new OutgoingMessage(connection, grizzlyBuffer);
             if (!this.outgoingMessageQueue.offer(message)) {
                 throw new OutgoingQueueFullException("Unable to queue outgoing message, queue full");
             }
