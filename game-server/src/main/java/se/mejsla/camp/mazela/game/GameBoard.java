@@ -42,11 +42,11 @@ import java.util.stream.Collectors;
  */
 public class GameBoard {
 
-    private static final double PLAYER_INITAL_AREA_WIDTH = 10;
-    private static final double PLAYER_INITAL_AREA_HEIGHT = 10;
+    private static final double PLAYER_INITAL_AREA_WIDTH = 18;
+    private static final double PLAYER_INITAL_AREA_HEIGHT = 18;
     private static final double WORLD_BOUNDS_WIDTH = 20;
     private static final double WORLD_BOUNDS_HEIGHT = 20;
-    private static final double BOUNCYNESS = 0.9;
+    private static final double BOUNCYNESS = 0.0001;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final XORShiftRandom fastRandom = new XORShiftRandom(System.currentTimeMillis());
@@ -74,7 +74,7 @@ public class GameBoard {
         topFixture.setRestitution(BOUNCYNESS);
         top.addFixture(topFixture);
         top.setMass(MassType.INFINITE);
-        top.translate(0, (PLAYER_INITAL_AREA_HEIGHT / 2) + 0.5);
+        top.translate(0, (PLAYER_INITAL_AREA_HEIGHT / 2) - 0.5);
         this.physicsSpace.getWorld().addBody(top);
 
         final Body bottom = new Body();
@@ -82,7 +82,7 @@ public class GameBoard {
         bottomFixture.setRestitution(BOUNCYNESS);
         bottom.addFixture(bottomFixture);
         bottom.setMass(MassType.INFINITE);
-        bottom.translate(0, -(PLAYER_INITAL_AREA_HEIGHT / 2) - 0.5);
+        bottom.translate(0, -(PLAYER_INITAL_AREA_HEIGHT / 2) + 0.5);
         this.physicsSpace.getWorld().addBody(bottom);
 
         final Body left = new Body();
@@ -90,7 +90,7 @@ public class GameBoard {
         leftFixture.setRestitution(BOUNCYNESS);
         left.addFixture(leftFixture);
         left.setMass(MassType.INFINITE);
-        left.translate(-(PLAYER_INITAL_AREA_HEIGHT / 2) - 0.5, 0);
+        left.translate(-(PLAYER_INITAL_AREA_HEIGHT / 2) + 0.5, 0);
         this.physicsSpace.getWorld().addBody(left);
 
         final Body right = new Body();
@@ -98,7 +98,7 @@ public class GameBoard {
         rightFixture.setRestitution(BOUNCYNESS);
         right.addFixture(rightFixture);
         right.setMass(MassType.INFINITE);
-        right.translate((PLAYER_INITAL_AREA_HEIGHT / 2) + 0.5, 0);
+        right.translate((PLAYER_INITAL_AREA_HEIGHT / 2) - 0.5, 0);
         this.physicsSpace.getWorld().addBody(right);
     }
 

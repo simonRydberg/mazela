@@ -56,7 +56,7 @@ public class Player {
         if (this.down.get()) {
             force.add(0, -tpf);
         }
-        force.multiply(200);
+        force.multiply(4000);
         this.physicsBody.applyForce(force);
     }
 

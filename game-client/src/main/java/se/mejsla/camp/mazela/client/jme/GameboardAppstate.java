@@ -55,7 +55,7 @@ public class GameboardAppstate extends AbstractAppState {
         SimpleApplication sapp = ((SimpleApplication) app);
         this.rootNode = sapp.getRootNode();
         this.assetManager = sapp.getAssetManager();
-        this.rootNode.addLight(new DirectionalLight(new Vector3f(0.5f, -1.0f, 0.0f).normalize()));
+        this.rootNode.addLight(new DirectionalLight(new Vector3f(0.5f, -1.0f, 1.0f).normalize()));
         this.rootNode.addLight(new AmbientLight(new ColorRGBA(0.1f, 0.1f, 0.1f, 1.0f)));
         this.entityNode = new Node("Entities");
         this.rootNode.attachChild(this.entityNode);
