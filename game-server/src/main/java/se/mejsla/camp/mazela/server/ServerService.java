@@ -18,14 +18,6 @@ package se.mejsla.camp.mazela.server;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.AbstractScheduledService;
 import com.google.protobuf.InvalidProtocolBufferException;
-import java.nio.ByteBuffer;
-import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import nu.zoom.corridors.math.MathUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +32,12 @@ import se.mejsla.camp.mazela.network.server.IncomingMessage;
 import se.mejsla.camp.mazela.network.server.NetworkServer;
 import se.mejsla.camp.mazela.server.proto.Encoder;
 
+import java.nio.ByteBuffer;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.logging.Level;
+
 /**
- *
  * @author Johan Maasing <johan@zoom.nu>
  */
 public class ServerService extends AbstractScheduledService {
@@ -56,10 +52,21 @@ public class ServerService extends AbstractScheduledService {
 
     private final Map<UUID, MazelaProtocol.Color> colorForPlayer = new HashMap<>();
     private final List<MazelaProtocol.Color> freeColors = new ArrayList<>(Arrays.asList(
-             MazelaProtocol.Color.newBuilder().setBlue(255).build(),
-             MazelaProtocol.Color.newBuilder().setRed(255).build(),
-             MazelaProtocol.Color.newBuilder().setGreen(255).build()
+            createColor(0, 0, 255),
+            createColor(255, 0, 0),
+            createColor(0, 255, 0),
+            createColor(0, 0, 255),
+            createColor(255, 0, 255),
+            createColor(125, 125, 0)
     ));
+
+    private MazelaProtocol.Color createColor(int r, int g, int b) {
+        return MazelaProtocol.Color.newBuilder()
+                .setRed(r)
+                .setGreen(g)
+                .setBlue(b)
+                .build();
+    }
 
     public ServerService(
             final NetworkServer networkServer,
@@ -75,7 +82,8 @@ public class ServerService extends AbstractScheduledService {
                 this.authenticatedConnections.remove(id);
                 this.gameBoard.dropPlayer(id);
                 freeColors.add(colorForPlayer.get(id.getUuid()));
-                colorForPlayer.remove(id.getUuid()); }
+                colorForPlayer.remove(id.getUuid());
+            }
         });
     }
 
@@ -89,8 +97,8 @@ public class ServerService extends AbstractScheduledService {
     @Override
     protected void runOneIteration() throws Exception {
         for (IncomingMessage incomingMessage = this.networkServer.getIncomingMessage();
-                incomingMessage != null;
-                incomingMessage = this.networkServer.getIncomingMessage()) {
+             incomingMessage != null;
+             incomingMessage = this.networkServer.getIncomingMessage()) {
             asyncParseMessage(incomingMessage);
         }
 
@@ -102,7 +110,7 @@ public class ServerService extends AbstractScheduledService {
 
         this.gameBoard.tick(tpf);
         final List<EntityUpdate> gameState = this.gameBoard.snapshotGamestate();
-        final ByteBuffer payload = Encoder.encodeGameState(gameState,colorForPlayer);
+        final ByteBuffer payload = Encoder.encodeGameState(gameState, colorForPlayer);
         try {
             for (ConnectionID cID : this.gameBoard.getPlayers()) {
                 this.networkServer.sendMessage(payload, cID);
