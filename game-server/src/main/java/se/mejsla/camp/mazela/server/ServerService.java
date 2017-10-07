@@ -55,11 +55,11 @@ public class ServerService extends AbstractScheduledService {
             = new CopyOnWriteArrayList<>();
 
     private final Map<UUID, MazelaProtocol.Color> colorForPlayer = new HashMap<>();
-    private final List<MazelaProtocol.Color> freeColors = Arrays.asList(
+    private final List<MazelaProtocol.Color> freeColors = new ArrayList<>(Arrays.asList(
              MazelaProtocol.Color.newBuilder().setBlue(255).build(),
              MazelaProtocol.Color.newBuilder().setRed(255).build(),
              MazelaProtocol.Color.newBuilder().setGreen(255).build()
-    );
+    ));
 
     public ServerService(
             final NetworkServer networkServer,
@@ -92,6 +92,7 @@ public class ServerService extends AbstractScheduledService {
                 incomingMessage = this.networkServer.getIncomingMessage()) {
             asyncParseMessage(incomingMessage);
         }
+
 
         final long now = System.nanoTime();
         final long frameTime = now - this.lastFrameTime;
@@ -145,7 +146,7 @@ public class ServerService extends AbstractScheduledService {
                             );
                             MazelaProtocol.Color color = freeColors.remove(0);
                             replyBuilder.setColor(color);
-                            colorForPlayer.put(result, color);
+                            colorForPlayer.put(connectionID.getUuid(), color);
                             log.debug("Authentication success for connection: {}, with color: {}", result, color);
                             this.authenticatedConnections.add(connectionID);
 
@@ -179,6 +180,12 @@ public class ServerService extends AbstractScheduledService {
                                 connectionID,
                                 envelope.getClientInput()
                         );
+                        break;
+                    }
+                    case DisconnectClient: {
+                        MazelaProtocol.DisconnectClient disconnectClient = envelope.getDisconnectClient();
+                        freeColors.add(colorForPlayer.get(connectionID.getUuid()));
+                        colorForPlayer.remove(connectionID.getUuid());
                         break;
                     }
                 }

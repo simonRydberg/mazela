@@ -59,4 +59,12 @@ public interface NetworkServer extends Service {
      * queued.
      */
     IncomingMessage getIncomingMessage();
+
+    /**
+     * Get dropped connections.
+     *
+     * @return The next message in the in-queue or null if no messages are
+     * queued.
+     */
+    ConnectionID getDisconnected();
 }

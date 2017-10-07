@@ -27,7 +27,6 @@ message JoinPlayer {
     string nickname = 1 ;
 }
 
-
 message GameboardUpdate {
     message Coordinate {
         float x = 1;
@@ -40,6 +39,10 @@ message GameboardUpdate {
         Color color = 7;
     }
     repeated EntityUpdate updates = 1 ;
+}
+
+message DisconnectClient {
+    Uuid uuid = 1;
 }
 
 message ClientInput {
@@ -56,6 +59,7 @@ message Envelope {
         JoinPlayer = 2 ;
         GameboardUpdate = 3 ;
         ClientInput = 4 ;
+        DisconnectClient = 5 ;
     }
     MessageType message_type = 1 ;
     oneof content {
@@ -64,5 +68,6 @@ message Envelope {
         JoinPlayer join_player = 4 ;
         GameboardUpdate gameboard_update = 5 ;
         ClientInput client_input = 6 ;
+        DisconnectClient disconnectClient = 7 ;
     }
 }
