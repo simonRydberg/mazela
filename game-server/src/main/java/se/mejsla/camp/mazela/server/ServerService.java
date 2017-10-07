@@ -74,7 +74,8 @@ public class ServerService extends AbstractScheduledService {
             if (id != null) {
                 this.authenticatedConnections.remove(id);
                 this.gameBoard.dropPlayer(id);
-            }
+                freeColors.add(colorForPlayer.get(id.getUuid()));
+                colorForPlayer.remove(id.getUuid()); }
         });
     }
 
@@ -180,12 +181,6 @@ public class ServerService extends AbstractScheduledService {
                                 connectionID,
                                 envelope.getClientInput()
                         );
-                        break;
-                    }
-                    case DisconnectClient: {
-                        MazelaProtocol.DisconnectClient disconnectClient = envelope.getDisconnectClient();
-                        freeColors.add(colorForPlayer.get(connectionID.getUuid()));
-                        colorForPlayer.remove(connectionID.getUuid());
                         break;
                     }
                 }

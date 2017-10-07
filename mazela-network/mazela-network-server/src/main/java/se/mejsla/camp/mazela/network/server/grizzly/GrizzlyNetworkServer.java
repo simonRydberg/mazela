@@ -62,10 +62,6 @@ public class GrizzlyNetworkServer extends AbstractService implements NetworkServ
      */
     private final ConcurrentLinkedQueue<IncomingMessage> incomingMessageQueue = new ConcurrentLinkedQueue<>();
     /**
-     * Holds messages coming in through the network.
-     */
-    private final ConcurrentLinkedQueue<ConnectionID> disconnectedQueue = new ConcurrentLinkedQueue<ConnectionID>();
-    /**
      * Holds messages that are to be sent on the network.
      */
     private final ArrayBlockingQueue<OutgoingMessage> outgoingMessageQueue;
@@ -192,11 +188,6 @@ public class GrizzlyNetworkServer extends AbstractService implements NetworkServ
     }
 
     @Override
-    public ConnectionID getDisconnected() {
-        return this.disconnectedQueue.poll();
-    }
-
-    @Override
     public void sendMessage(ByteBuffer data, ConnectionID recipient)
             throws NotConnectedException, OutgoingQueueFullException {
         final Connection connection = this.knownConnections.get(
@@ -261,7 +252,6 @@ public class GrizzlyNetworkServer extends AbstractService implements NetworkServ
             for (Consumer<ConnectionID> consumer : droppedConnectionListeners) {
                 backgroundExecutor.execute(() -> {
                     try {
-                        disconnectedQueue.add(connectionID);
                         consumer.accept(connectionID);
                     } catch (Exception e) {
                         log.error("Dropped connection listener is poorly coded and throws unchecked exceptions.", e);
