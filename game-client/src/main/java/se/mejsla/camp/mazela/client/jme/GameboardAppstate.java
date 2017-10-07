@@ -27,17 +27,13 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -65,6 +61,8 @@ public class GameboardAppstate extends AbstractAppState {
         this.rootNode.attachChild(this.entityNode);
         addHorizontalEdge("top", 6f);
         addHorizontalEdge("bottom", -6f);
+        addVerticalEdge("left", -6f);
+        addVerticalEdge("right", 6f);
         super.initialize(stateManager, app);
     }
 
@@ -81,6 +79,22 @@ public class GameboardAppstate extends AbstractAppState {
         mat.setFloat("Shininess", 8f);  // [0,128]
         geom.setMaterial(mat);
         geom.setLocalTranslation(0, y, Z_AXIS_OFFSET);
+        rootNode.attachChild(geom);
+    }
+
+    private void addVerticalEdge(final String name, final float x) {
+        Geometry geom = new Geometry(name, new Box(1, 10, 1));
+        final Material mat = new Material(
+                assetManager,
+                "Common/MatDefs/Light/Lighting.j3md"
+        );
+        mat.setBoolean("UseMaterialColors", true);
+        mat.setColor("Diffuse", ColorRGBA.Green);
+        mat.setColor("Ambient", ColorRGBA.Green);
+        mat.setColor("Specular", ColorRGBA.White);
+        mat.setFloat("Shininess", 8f);  // [0,128]
+        geom.setMaterial(mat);
+        geom.setLocalTranslation(x, 0, Z_AXIS_OFFSET);
         rootNode.attachChild(geom);
     }
 

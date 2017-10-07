@@ -20,16 +20,17 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.mejsla.camp.mazela.network.client.NetworkClient;
 import se.mejsla.camp.mazela.network.common.NotConnectedException;
 import se.mejsla.camp.mazela.network.common.OutgoingQueueFullException;
 import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
+
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  *
@@ -67,7 +68,8 @@ public class ProtobufAppState extends AbstractAppState {
             // Pretend that we got this from the user
             log.debug("Connecting to the server");
             this.networkClient.connect("127.0.0.1", 1666);
-            // this.networkClient.connect("192.168.1.27", 1666);
+//            this.networkClient.connect("192.168.1.32", 1666);
+//            this.networkClient.connect("192.168.1.27", 1666);
         } else {
             if (!authenticated) {
                 if (!awaitingAuthentication) {
