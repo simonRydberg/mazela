@@ -27,22 +27,39 @@ message JoinPlayer {
     string nickname = 1 ;
 }
 
-message GameboardUpdate {
-    message Coordinate {
-        float x = 1;
-        float y = 2 ;
-    }
-    message EntityUpdate {
-        Uuid uuid = 1;
-        Coordinate coords = 2;
-        int32 state = 6 ;
-        Color color = 7;
-    }
-    repeated EntityUpdate updates = 1 ;
+message Coordinate {
+    float x = 1;
+    float y = 2 ;
 }
 
-message DisconnectClient {
+message PlayerEntity {
     Uuid uuid = 1;
+    Coordinate coords = 2;
+    int32 score = 3;
+    Color color = 4;
+    string name = 5;
+}
+
+message ScoreEntity {
+    Uuid uuid = 1;
+    Coordinate coords = 2;
+    int32 score = 3;
+    Color color = 4;
+}
+
+message GameboardUpdate {
+    message EntityUpdate {
+        enum EntityType {
+            PlayerEntity = 0 ;
+            ScoreEntity = 1 ;
+        }
+        EntityType entity_type = 1 ;
+        oneof content {
+            PlayerEntity player_entity = 2 ;
+            ScoreEntity score_entity = 3 ;
+        }
+    }
+    repeated EntityUpdate updates = 1 ;
 }
 
 message ClientInput {
@@ -68,6 +85,5 @@ message Envelope {
         JoinPlayer join_player = 4 ;
         GameboardUpdate gameboard_update = 5 ;
         ClientInput client_input = 6 ;
-        DisconnectClient disconnectClient = 7 ;
     }
 }
