@@ -15,6 +15,8 @@
  */
 package se.mejsla.camp.mazela.client.jme;
 
+import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
+
 import java.util.UUID;
 
 /**
@@ -27,12 +29,14 @@ public class EntityUpdate {
     private final float x;
     private final float y;
     private final int state;
+    private final MazelaProtocol.Color color;
 
-    public EntityUpdate(UUID entityID, float x, float y, final int state) {
+    public EntityUpdate(UUID entityID, float x, float y, final int state, MazelaProtocol.Color color) {
         this.entityID = entityID;
         this.x = x;
         this.y = y;
         this.state = state;
+        this.color = color;
     }
 
     public UUID getEntityID() {
@@ -45,5 +49,9 @@ public class EntityUpdate {
 
     public float getY() {
         return y;
+    }
+
+    public MazelaProtocol.Color getColor() {
+        return color;
     }
 }

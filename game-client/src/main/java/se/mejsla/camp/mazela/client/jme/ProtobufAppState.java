@@ -168,7 +168,8 @@ public class ProtobufAppState extends AbstractAppState {
                                 ),
                                 update.getCoords().getX(),
                                 update.getCoords().getY(),
-                                update.getState()
+                                update.getState(),
+                                update.getColor()
                         );
                         pendingUpdates.add(pendingUpdate);
                     }
