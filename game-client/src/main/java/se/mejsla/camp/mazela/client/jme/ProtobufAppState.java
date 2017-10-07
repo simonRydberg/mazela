@@ -46,9 +46,11 @@ public class ProtobufAppState extends AbstractAppState {
     private boolean authenticated = false;
     private boolean awaitingAuthentication = false;
     private final GameboardAppstate gameboardAppstate;
+    private final String userName;
     private final String serverHostName;
 
-    public ProtobufAppState(final String serverHostName, final NetworkClient networkClient, final GameboardAppstate gameboardAppstate) {
+    public ProtobufAppState(String userName, final String serverHostName, final NetworkClient networkClient, final GameboardAppstate gameboardAppstate) {
+        this.userName = userName;
         this.serverHostName = serverHostName;
         this.networkClient = Preconditions.checkNotNull(networkClient);
         this.gameboardAppstate = Preconditions.checkNotNull(gameboardAppstate);
@@ -127,13 +129,13 @@ public class ProtobufAppState extends AbstractAppState {
                     gameboardAppstate.setPlayerUUID(uuid);
                     log.debug("Authentication success: {}", uuid);
                     // Pretend we have some lobby and that the user chooses to join a game.
-                    log.debug("Trying to join the game");
+                    log.debug("Trying to join game with user " + userName);
                     final byte[] message = MazelaProtocol.Envelope
                             .newBuilder()
                             .setMessageType(MazelaProtocol.Envelope.MessageType.JoinPlayer)
                             .setJoinPlayer(
                                     MazelaProtocol.JoinPlayer.newBuilder()
-                                            .setNickname("Foo")
+                                            .setNickname(userName)
                                             .build()
                             )
                             .build()
