@@ -21,7 +21,6 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -55,8 +54,8 @@ public class GameboardAppstate extends AbstractAppState {
         SimpleApplication sapp = ((SimpleApplication) app);
         this.rootNode = sapp.getRootNode();
         this.assetManager = sapp.getAssetManager();
-        this.rootNode.addLight(new DirectionalLight(new Vector3f(0.5f, -1.0f, 1.0f).normalize()));
-        this.rootNode.addLight(new AmbientLight(new ColorRGBA(0.1f, 0.1f, 0.1f, 1.0f)));
+//        this.rootNode.addLight(new DirectionalLight(new Vector3f(0.5f, -1.0f, 1.0f).normalize()));
+        this.rootNode.addLight(new AmbientLight(new ColorRGBA(0.5f, 0.5f, 0.5f, 1.0f)));
         this.entityNode = new Node("Entities");
         this.rootNode.attachChild(this.entityNode);
         addHorizontalEdge("top", 9f);

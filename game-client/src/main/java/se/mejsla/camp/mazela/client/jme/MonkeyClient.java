@@ -17,12 +17,13 @@ package se.mejsla.camp.mazela.client.jme;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.system.AppSettings;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.mejsla.camp.mazela.network.client.grizzly.GrizzlyNetworkClient;
+
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -104,7 +105,5 @@ public class MonkeyClient extends SimpleApplication {
             log.error("Network client did not start in time", ex);
             beginShutdown();
         }
-
     }
-
 }
