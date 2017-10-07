@@ -30,6 +30,7 @@ import java.util.concurrent.TimeoutException;
  * Main client class.
  *
  * Usage: java ... MonkeyClient [server host name] [user name]
+ *
  * @author Johan Maasing <johan@zoom.nu>
  */
 public class MonkeyClient extends SimpleApplication {
