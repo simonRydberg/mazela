@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.mejsla.camp.mazela.game;
+package se.mejsla.camp.mazela.game.domain;
 
 import com.google.common.base.Preconditions;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
@@ -26,7 +27,7 @@ import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
  *
  * @author Johan Maasing <johan@zoom.nu>
  */
-public class Player {
+public class Player implements GameModel{
 
     private final Body physicsBody;
     private final AtomicBoolean up = new AtomicBoolean(false);
@@ -34,6 +35,8 @@ public class Player {
     private final AtomicBoolean left = new AtomicBoolean(false);
     private final AtomicBoolean right = new AtomicBoolean(false);
     private final AtomicBoolean needsUpdate = new AtomicBoolean(false);
+    private final AtomicInteger score = new AtomicInteger(0);
+    private  String name;
 
     public Player(final Body physicsBody) {
         this.physicsBody = Preconditions.checkNotNull(physicsBody);
@@ -74,5 +77,21 @@ public class Player {
         this.left.set(left);
         this.right.set(right);
         this.needsUpdate.set(true);
+    }
+
+    public AtomicInteger getScore() {
+        return score;
+    }
+
+    public void addScore(int score) {
+        this.score.addAndGet(score);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

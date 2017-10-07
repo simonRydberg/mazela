@@ -17,14 +17,19 @@ package se.mejsla.camp.mazela.game;
 
 import com.google.common.base.Preconditions;
 import nu.zoom.corridors.math.XORShiftRandom;
+import org.dyn4j.collision.narrowphase.Penetration;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
+import org.dyn4j.dynamics.CollisionAdapter;
 import org.dyn4j.geometry.Circle;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Rectangle;
 import org.dyn4j.geometry.Vector2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.mejsla.camp.mazela.game.domain.GameModel;
+import se.mejsla.camp.mazela.game.domain.Player;
+import se.mejsla.camp.mazela.game.domain.Score;
 import se.mejsla.camp.mazela.game.physics.PhysicsSpace;
 import se.mejsla.camp.mazela.network.common.ConnectionID;
 import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
@@ -53,6 +58,7 @@ public class GameBoard {
     private final PhysicsSpace physicsSpace = new PhysicsSpace(WORLD_BOUNDS_WIDTH, WORLD_BOUNDS_HEIGHT);
 
     private final ConcurrentHashMap<ConnectionID, Player> players = new ConcurrentHashMap<>();
+    private final List<GameModel> gameModels = new ArrayList<>();
 
     private final CopyOnWriteArrayList<ConnectionID> pendingPlayerAdds;
     private final CopyOnWriteArrayList<ConnectionID> pendingPlayerDeletes;
@@ -61,6 +67,7 @@ public class GameBoard {
         this.pendingPlayerDeletes = new CopyOnWriteArrayList<>();
         this.pendingPlayerAdds = new CopyOnWriteArrayList<>();
         physicsSpace.getWorld().setGravity(new Vector2(0, 0));
+        physicsSpace.getWorld().addListener(new ScoreContactListener(this));
         setupEdges();
     }
 
@@ -100,6 +107,12 @@ public class GameBoard {
         right.setMass(MassType.INFINITE);
         right.translate((PLAYER_INITAL_AREA_HEIGHT / 2) - 0.5, 0);
         this.physicsSpace.getWorld().addBody(right);
+
+        // Adding initial scores
+        addScoreRandomPos(1);
+        addScoreRandomPos(3);
+        addScoreRandomPos(5);
+        addScoreRandomPos(7);
     }
 
     public void addPlayer(ConnectionID connectionID) {
@@ -129,10 +142,28 @@ public class GameBoard {
                 double initialY = (PLAYER_INITAL_AREA_HEIGHT / 2) - 1.0;
                 body.getTransform().translate(initialX, initialY);
                 this.physicsSpace.getWorld().addBody(body);
-                return new Player(body);
+                Player player = new Player(body);
+                body.setUserData(player);
+                return player;
             });
         }
         this.pendingPlayerAdds.clear();
+    }
+
+    private void addScoreRandomPos(int score) {
+        final Body body = new Body();
+        final BodyFixture bodyFixture = new BodyFixture(new Circle(1.0));
+        bodyFixture.setRestitution(BOUNCYNESS);
+        body.addFixture(bodyFixture);
+        body.setMass(MassType.NORMAL);
+        double initialX = this.fastRandom.unitRandom() * PLAYER_INITAL_AREA_WIDTH - (PLAYER_INITAL_AREA_WIDTH / 2);
+        double initialY = this.fastRandom.unitRandom() * PLAYER_INITAL_AREA_HEIGHT - (PLAYER_INITAL_AREA_HEIGHT / 2);
+        body.getTransform().translate(initialX, initialY);
+        this.physicsSpace.getWorld().addBody(body);
+        Score scoreModel = new Score(body, score);
+        body.setUserData(scoreModel);
+        this.gameModels.add(scoreModel);
+        log.debug("Adding score {} at '{}-{}'to the board", score, initialX, initialY);
     }
 
     private void removePendingPlayers() {
@@ -194,6 +225,39 @@ public class GameBoard {
                         clientInput.getDown()
                 );
             }
+        }
+    }
+
+    public static class ScoreContactListener extends CollisionAdapter {
+        GameBoard gameBoard;
+
+        public ScoreContactListener(GameBoard gameBoard) {
+            this.gameBoard = gameBoard;
+        }
+
+        @Override
+        public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
+            Player player = null;
+            Body playerBody = null;
+            Score score = null;
+            Body scoreBody = null;
+            if (body1.getUserData() instanceof Player) {
+                player = (Player) body1.getUserData();
+                score = (Score) body2.getUserData();
+                playerBody = body1;
+                scoreBody = body2;
+            } else if (body2.getUserData() instanceof Player) {
+                player = (Player) body2.getUserData();
+                score = (Score) body1.getUserData();
+                playerBody = body2;
+                scoreBody = body1;
+            } else {
+                return true;
+            }
+
+            player.addScore(score.getSore());
+            gameBoard.physicsSpace.getWorld().removeBody(scoreBody);
+            return true;
         }
     }
 }

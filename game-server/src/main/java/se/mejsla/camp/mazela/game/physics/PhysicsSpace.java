@@ -16,6 +16,10 @@
 package se.mejsla.camp.mazela.game.physics;
 
 import org.dyn4j.collision.AxisAlignedBounds;
+import org.dyn4j.collision.narrowphase.Penetration;
+import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.BodyFixture;
+import org.dyn4j.dynamics.CollisionAdapter;
 import org.dyn4j.dynamics.World;
 
 /**
