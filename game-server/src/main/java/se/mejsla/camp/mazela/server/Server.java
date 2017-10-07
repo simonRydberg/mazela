@@ -27,7 +27,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
- *
  * @author Johan Maasing <johan@zoom.nu>
  */
 public class Server {
@@ -52,11 +51,16 @@ public class Server {
     private ServerService server;
 
     public static void main(final String[] args) {
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            System.err.println("Uncaught exception in thread " + t + ": " + e);
+            e.printStackTrace();
+        });
         Server server = new Server();
         server.parseCommandLine(args);
         server.initialize();
         server.run();
     }
+
     private int serverPort;
 
     private void run() {

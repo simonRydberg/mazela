@@ -95,27 +95,31 @@ public class ServerService extends AbstractScheduledService {
 
     @Override
     protected void runOneIteration() throws Exception {
-        for (IncomingMessage incomingMessage = this.networkServer.getIncomingMessage();
-             incomingMessage != null;
-             incomingMessage = this.networkServer.getIncomingMessage()) {
-            asyncParseMessage(incomingMessage);
-        }
-
-
-        final long now = System.nanoTime();
-        final long frameTime = now - this.lastFrameTime;
-        this.lastFrameTime = now;
-        final float tpf = (float) MathUtil.nanosToSeconds(frameTime);
-
-        this.gameBoard.tick(tpf);
-        final List<EntityUpdate> gameState = this.gameBoard.snapshotGamestate();
-        final ByteBuffer payload = Encoder.encodeGameState(gameState, colorForPlayer);
         try {
-            for (ConnectionID cID : this.gameBoard.getPlayers()) {
-                this.networkServer.sendMessage(payload, cID);
+            for (IncomingMessage incomingMessage = this.networkServer.getIncomingMessage();
+                 incomingMessage != null;
+                 incomingMessage = this.networkServer.getIncomingMessage()) {
+                asyncParseMessage(incomingMessage);
             }
-        } catch (OutgoingQueueFullException | NotConnectedException ex) {
-            log.error("Unable to send game state update to all clients", ex);
+
+
+            final long now = System.nanoTime();
+            final long frameTime = now - this.lastFrameTime;
+            this.lastFrameTime = now;
+            final float tpf = (float) MathUtil.nanosToSeconds(frameTime);
+
+            this.gameBoard.tick(tpf);
+            final List<EntityUpdate> gameState = this.gameBoard.snapshotGamestate();
+            final ByteBuffer payload = Encoder.encodeGameState(gameState, colorForPlayer);
+            try {
+                for (ConnectionID cID : this.gameBoard.getPlayers()) {
+                    this.networkServer.sendMessage(payload, cID);
+                }
+            } catch (OutgoingQueueFullException | NotConnectedException ex) {
+                log.error("Unable to send game state update to all clients", ex);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -194,6 +198,8 @@ public class ServerService extends AbstractScheduledService {
                 log.error("Unable to parse network message", e);
             } catch (InvalidProtocolBufferException ex) {
                 java.util.logging.Logger.getLogger(ServerService.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }

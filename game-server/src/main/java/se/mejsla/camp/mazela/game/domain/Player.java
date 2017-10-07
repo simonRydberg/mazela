@@ -16,19 +16,17 @@
 package se.mejsla.camp.mazela.game.domain;
 
 import com.google.common.base.Preconditions;
+import org.dyn4j.dynamics.Body;
+import org.dyn4j.geometry.Vector2;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.dyn4j.dynamics.Body;
-import org.dyn4j.geometry.Vector2;
-
 /**
- *
  * @author Johan Maasing <johan@zoom.nu>
  */
-public class Player implements GameModel{
+public class Player implements GameModel {
 
     private final Body physicsBody;
     private final AtomicBoolean up = new AtomicBoolean(false);
@@ -37,11 +35,12 @@ public class Player implements GameModel{
     private final AtomicBoolean right = new AtomicBoolean(false);
     private final AtomicBoolean needsUpdate = new AtomicBoolean(false);
     private final AtomicInteger score = new AtomicInteger(0);
-    private  String name;
+    private String name = "test";
     private final UUID uuid;
 
     public Player(UUID uuid, final Body physicsBody) {
         this.uuid = uuid;
+        name = "Server: " + uuid.toString();
         this.physicsBody = Preconditions.checkNotNull(physicsBody);
     }
 

@@ -109,10 +109,10 @@ public class GameBoard {
         this.physicsSpace.getWorld().addBody(right);
 
         // Adding initial scores
-        addScoreRandomPos(1, createColor(50,50,50));
-        addScoreRandomPos(3,createColor(100,100,100));
-        addScoreRandomPos(5,createColor(150,150,150));
-        addScoreRandomPos(7,createColor(200,200,200));
+        addScoreRandomPos(1, createColor(50, 50, 50));
+        addScoreRandomPos(3, createColor(100, 100, 100));
+        addScoreRandomPos(5, createColor(150, 150, 150));
+        addScoreRandomPos(7, createColor(200, 200, 200));
     }
 
     private MazelaProtocol.Color createColor(int r, int g, int b) {
@@ -259,17 +259,20 @@ public class GameBoard {
             Body playerBody = null;
             Score score = null;
             Body scoreBody = null;
-            if (body1.getUserData() instanceof Player) {
+            if (body1.getUserData() instanceof Player && body2.getUserData() instanceof Score) {
                 player = (Player) body1.getUserData();
                 score = (Score) body2.getUserData();
                 playerBody = body1;
                 scoreBody = body2;
-            } else if (body2.getUserData() instanceof Player) {
+            } else if (body2.getUserData() instanceof Player && body1.getUserData() instanceof Score) {
                 player = (Player) body2.getUserData();
                 score = (Score) body1.getUserData();
                 playerBody = body2;
                 scoreBody = body1;
             } else {
+                return true;
+            }
+            if (score == null) {
                 return true;
             }
 
