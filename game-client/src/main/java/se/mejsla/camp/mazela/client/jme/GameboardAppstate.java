@@ -105,37 +105,45 @@ public class GameboardAppstate extends AbstractAppState {
         if (this.pendingUpdates != null) {
             // Mutate the scene graph
             ArrayList<UUID> updatedEntities = new ArrayList<>();
-            for (EntityUpdate pu : this.pendingUpdates) {
+            for (EntityUpdate pu : pendingUpdates) {
                 final UUID entityUUID = pu.getEntityID();
-                Node playerNode = this.entityNodes.get(entityUUID);
-                if (playerNode == null) {
-                    // New player
+                Node node = entityNodes.get(entityUUID);
+                if (node == null) {
 //                    https://jmonkeyengine.github.io/wiki/jme3/advanced/shape.html#3d-shapes
 //                    Dome mesh = new Dome(Vector3f.    ZERO, 2, 4, 1f,false); // Pyramid
-                    final Geometry geom = new Geometry(
-                            entityUUID.toString() + "-geom",
-                            new Sphere(32, 32, 1.0f)
-                    );
-                    final Material sphereMat = new Material(
-                            assetManager,
-                            "Common/MatDefs/Light/Lighting.j3md"
-                    );
+                    final Geometry geometry;
+                    final Material material;
+                    if (pu instanceof PlayerEntityUpdate) {
+                        log.debug("Creating player node");
+                        geometry = new Geometry(
+                                entityUUID.toString() + "-geom",
+                                new Sphere(32, 32, 1.0f)
+                        );
+                        material = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
+                    } else {
+                        log.debug("Creating score node");
+                        geometry = new Geometry(
+                                entityUUID.toString() + "-geom",
+                                new Box(10, 10, 1.0f)
+                        );
+                        material = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
+                    }
                     // Get entity color
                     MazelaProtocol.Color color = pu.getColor();
                     ColorRGBA colorRGBA = new ColorRGBA(color.getRed(), color.getGreen(), color.getBlue(), 1f);
-                    sphereMat.setBoolean("UseMaterialColors", true);
-                    sphereMat.setColor("Diffuse", colorRGBA);
-                    sphereMat.setColor("Ambient", colorRGBA);
-                    sphereMat.setColor("Specular", ColorRGBA.White);
-                    sphereMat.setFloat("Shininess", 64f);  // [0,128]
-                    geom.setMaterial(sphereMat);
-                    playerNode = new Node(entityUUID.toString());
-                    playerNode.attachChild(geom);
-                    log.debug("Attaching player {} node", entityUUID);
-                    rootNode.attachChild(playerNode);
-                    entityNodes.put(entityUUID, playerNode);
+                    material.setBoolean("UseMaterialColors", true);
+                    material.setColor("Diffuse", colorRGBA);
+                    material.setColor("Ambient", colorRGBA);
+                    material.setColor("Specular", ColorRGBA.White);
+                    material.setFloat("Shininess", 64f);  // [0,128]
+                    geometry.setMaterial(material);
+                    node = new Node(entityUUID.toString());
+                    node.attachChild(geometry);
+                    log.debug("Attaching entity {} node", entityUUID);
+                    rootNode.attachChild(node);
+                    entityNodes.put(entityUUID, node);
                 }
-                playerNode.setLocalTranslation(transformCoordinatesFromServerToClient(pu));
+                node.setLocalTranslation(transformCoordinatesFromServerToClient(pu));
 
                 updatedEntities.add(entityUUID);
             }

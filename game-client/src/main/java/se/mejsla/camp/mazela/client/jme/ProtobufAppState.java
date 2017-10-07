@@ -164,21 +164,32 @@ public class ProtobufAppState extends AbstractAppState {
                         EntityUpdate pendingUpdate;
                         switch (update.getEntityType()) {
                             case PlayerEntity:
-                                MazelaProtocol.PlayerEntity entity = update.getPlayerEntity();
-                                pendingUpdate = new EntityUpdate(
+                                MazelaProtocol.PlayerEntity playerEntity = update.getPlayerEntity();
+                                pendingUpdate = new PlayerEntityUpdate(
                                         new UUID(
-                                                entity.getUuid().getMostSignificantID(),
-                                                entity.getUuid().getLeastSignificantID()
+                                                playerEntity.getUuid().getMostSignificantID(),
+                                                playerEntity.getUuid().getLeastSignificantID()
                                         ),
-                                        entity.getCoords().getX(),
-                                        entity.getCoords().getY(),
-                                        entity.getScore(),
-                                        entity.getColor()
+                                        playerEntity.getCoords().getX(),
+                                        playerEntity.getCoords().getY(),
+                                        playerEntity.getScore(),
+                                        playerEntity.getName(),
+                                        playerEntity.getColor()
                                 );
                                 break;
                             case ScoreEntity:
-                                throw new UnsupportedOperationException("");
-//                                break;
+                                MazelaProtocol.ScoreEntity scoreEntity = update.getScoreEntity();
+                                pendingUpdate = new ScoreEntityUpdate(
+                                        new UUID(
+                                                scoreEntity.getUuid().getMostSignificantID(),
+                                                scoreEntity.getUuid().getLeastSignificantID()
+                                        ),
+                                        scoreEntity.getCoords().getX(),
+                                        scoreEntity.getCoords().getY(),
+                                        scoreEntity.getScore(),
+                                        scoreEntity.getColor()
+                                );
+                                break;
                             default:
                                 throw new IllegalStateException("invalid entity type: " + update.getEntityType());
                         }

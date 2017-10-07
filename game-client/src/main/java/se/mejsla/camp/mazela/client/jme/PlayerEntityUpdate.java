@@ -23,39 +23,16 @@ import java.util.UUID;
  *
  * @author Johan Maasing <johan@zoom.nu>
  */
-public abstract class EntityUpdate {
+public class PlayerEntityUpdate extends EntityUpdate {
 
-    private final UUID entityID;
-    private final float x;
-    private final float y;
-    private final int score;
-    private final MazelaProtocol.Color color;
+    private final String name;
 
-    public EntityUpdate(UUID entityID, float x, float y, int score, MazelaProtocol.Color color) {
-        this.entityID = entityID;
-        this.x = x;
-        this.y = y;
-        this.score = score;
-        this.color = color;
+    public PlayerEntityUpdate(UUID entityID, float x, float y, final int score, String name, MazelaProtocol.Color color) {
+        super(entityID, x, y, score, color);
+        this.name = name;
     }
 
-    public UUID getEntityID() {
-        return entityID;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public MazelaProtocol.Color getColor() {
-        return color;
-    }
-
-    public int getScore() {
-        return score;
+    public String getName() {
+        return name;
     }
 }
