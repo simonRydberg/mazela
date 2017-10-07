@@ -38,16 +38,18 @@ import java.util.UUID;
  */
 public class ProtobufAppState extends AbstractAppState {
 
+    private static final int SERVER_PORT = 1666;
+
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final NetworkClient networkClient;
     private boolean authenticated = false;
     private boolean awaitingAuthentication = false;
     private final GameboardAppstate gameboardAppstate;
+    private final String serverHostName;
 
-    public ProtobufAppState(
-            final NetworkClient networkClient,
-            final GameboardAppstate gameboardAppstate) {
+    public ProtobufAppState(final String serverHostName, final NetworkClient networkClient, final GameboardAppstate gameboardAppstate) {
+        this.serverHostName = serverHostName;
         this.networkClient = Preconditions.checkNotNull(networkClient);
         this.gameboardAppstate = Preconditions.checkNotNull(gameboardAppstate);
     }
@@ -66,10 +68,8 @@ public class ProtobufAppState extends AbstractAppState {
     private void handleNetwork() throws InvalidProtocolBufferException, OutgoingQueueFullException, NotConnectedException {
         if (!networkClient.isConnected()) {
             // Pretend that we got this from the user
-            log.debug("Connecting to the server");
-            this.networkClient.connect("127.0.0.1", 1666);
-//            this.networkClient.connect("192.168.1.32", 1666);
-//            this.networkClient.connect("192.168.1.27", 1666);
+            log.debug("Connecting to server " + serverHostName + ":" + SERVER_PORT);
+            this.networkClient.connect(serverHostName, SERVER_PORT);
         } else {
             if (!authenticated) {
                 if (!awaitingAuthentication) {
