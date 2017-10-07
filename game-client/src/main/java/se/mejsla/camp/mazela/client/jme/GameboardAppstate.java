@@ -110,6 +110,8 @@ public class GameboardAppstate extends AbstractAppState {
                 Node playerNode = this.entityNodes.get(entityUUID);
                 if (playerNode == null) {
                     // New player
+//                    https://jmonkeyengine.github.io/wiki/jme3/advanced/shape.html#3d-shapes
+//                    Dome mesh = new Dome(Vector3f.    ZERO, 2, 4, 1f,false); // Pyramid
                     final Geometry geom = new Geometry(
                             entityUUID.toString() + "-geom",
                             new Sphere(32, 32, 1.0f)
