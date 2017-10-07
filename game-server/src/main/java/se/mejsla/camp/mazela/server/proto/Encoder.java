@@ -15,16 +15,15 @@
  */
 package se.mejsla.camp.mazela.server.proto;
 
+import se.mejsla.camp.mazela.game.EntityUpdate;
+import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
+
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import se.mejsla.camp.mazela.game.EntityUpdate;
-import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
-
 /**
- *
  * @author Johan Maasing <johan@zoom.nu>
  */
 public abstract class Encoder {
@@ -34,26 +33,30 @@ public abstract class Encoder {
         final MazelaProtocol.GameboardUpdate.Builder gameboardBuilder = MazelaProtocol.GameboardUpdate.newBuilder();
         for (EntityUpdate update : updates) {
             UUID entityID = update.getEntityID();
+
+            MazelaProtocol.Coordinate coordinate = MazelaProtocol.Coordinate
+                    .newBuilder()
+                    .setX(update.getX())
+                    .setY(update.getY())
+                    .build();
+
+            MazelaProtocol.Uuid uuid = MazelaProtocol.Uuid
+                    .newBuilder()
+                    .setLeastSignificantID(update.getEntityID().getLeastSignificantBits())
+                    .setMostSignificantID(update.getEntityID().getMostSignificantBits())
+                    .build();
+
             MazelaProtocol.GameboardUpdate.EntityUpdate eu
                     = MazelaProtocol.GameboardUpdate.EntityUpdate
-                            .newBuilder()
-                            .setCoords(
-                                    MazelaProtocol.GameboardUpdate.Coordinate
-                                            .newBuilder()
-                                            .setX(update.getX())
-                                            .setY(update.getY())
-                                            .build()
-                            )
-                            .setState(0)
-                    .setColor(colorForPlayer.get(entityID))
-                            .setUuid(
-                                    MazelaProtocol.Uuid
-                                            .newBuilder()
-                                            .setLeastSignificantID(update.getEntityID().getLeastSignificantBits())
-                                            .setMostSignificantID(update.getEntityID().getMostSignificantBits())
-                                            .build()
-                            )
-                            .build();
+                    .newBuilder()
+                    .setEntityType(MazelaProtocol.GameboardUpdate.EntityUpdate.EntityType.PlayerEntity)
+                    .setPlayerEntity(MazelaProtocol.PlayerEntity.newBuilder()
+                            .setColor(colorForPlayer.get(entityID))
+                            .setCoords(coordinate)
+                            .setUuid(uuid)
+                            .build())
+                    .build();
+
             gameboardBuilder.addUpdates(eu);
         }
         final byte[] bytes = MazelaProtocol.Envelope

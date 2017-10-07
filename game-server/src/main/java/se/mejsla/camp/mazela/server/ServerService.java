@@ -136,8 +136,7 @@ public class ServerService extends AbstractScheduledService {
                         = MazelaProtocol.Envelope.parseFrom(messageData);
                 switch (envelope.getMessageType()) {
                     case AuthenticateRequest: {
-                        final MazelaProtocol.AuthenticateRequest req
-                                = envelope.getAuthenticationRequest();
+                        final MazelaProtocol.AuthenticateRequest req = envelope.getAuthenticationRequest();
                         // Pretend we are looking up the user record
                         final String username = req.getName();
                         final String password = req.getPassword();
