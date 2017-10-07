@@ -68,6 +68,7 @@ public class GameBoard {
         final Rectangle horizRectangle = new Rectangle(PLAYER_INITAL_AREA_WIDTH + 2, 1.0);
         final Rectangle verticalRectangle = new Rectangle(1, PLAYER_INITAL_AREA_WIDTH + 2);
 
+        // test
         final Body top = new Body();
         final BodyFixture topFixture = new BodyFixture(horizRectangle);
         topFixture.setRestitution(BOUNCYNESS);
