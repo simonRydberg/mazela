@@ -102,7 +102,7 @@ public class ServerService extends AbstractScheduledService {
 
         this.gameBoard.tick(tpf);
         final List<EntityUpdate> gameState = this.gameBoard.snapshotGamestate();
-        final ByteBuffer payload = Encoder.encodeGameState(gameState);
+        final ByteBuffer payload = Encoder.encodeGameState(gameState,colorForPlayer);
         try {
             for (ConnectionID cID : this.gameBoard.getPlayers()) {
                 this.networkServer.sendMessage(payload, cID);

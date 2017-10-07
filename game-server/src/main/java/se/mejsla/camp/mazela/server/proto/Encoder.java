@@ -17,6 +17,9 @@ package se.mejsla.camp.mazela.server.proto;
 
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import se.mejsla.camp.mazela.game.EntityUpdate;
 import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
 
@@ -26,9 +29,11 @@ import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
  */
 public abstract class Encoder {
 
-    public static ByteBuffer encodeGameState(final List<EntityUpdate> updates) {
+    public static ByteBuffer encodeGameState(final List<EntityUpdate> updates,
+                                             Map<UUID, MazelaProtocol.Color> colorForPlayer) {
         final MazelaProtocol.GameboardUpdate.Builder gameboardBuilder = MazelaProtocol.GameboardUpdate.newBuilder();
         for (EntityUpdate update : updates) {
+            UUID entityID = update.getEntityID();
             MazelaProtocol.GameboardUpdate.EntityUpdate eu
                     = MazelaProtocol.GameboardUpdate.EntityUpdate
                             .newBuilder()
@@ -40,6 +45,7 @@ public abstract class Encoder {
                                             .build()
                             )
                             .setState(0)
+                    .setColor(colorForPlayer.get(entityID))
                             .setUuid(
                                     MazelaProtocol.Uuid
                                             .newBuilder()
