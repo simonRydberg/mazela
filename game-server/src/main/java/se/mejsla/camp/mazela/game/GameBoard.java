@@ -142,7 +142,7 @@ public class GameBoard {
                 double initialY = (PLAYER_INITAL_AREA_HEIGHT / 2) - 1.0;
                 body.getTransform().translate(initialX, initialY);
                 this.physicsSpace.getWorld().addBody(body);
-                Player player = new Player(body);
+                Player player = new Player(connectionID.getUuid(), body);
                 body.setUserData(player);
                 return player;
             });
@@ -193,12 +193,24 @@ public class GameBoard {
         final ArrayList<EntityUpdate> result = new ArrayList<>();
         players.forEach((id, player) -> {
             Vector2 position = player.getPhysicsBody().getWorldCenter();
-            log.debug("Position: " + position);
+            log.debug("Player: " + position);
             result.add(
                     new EntityUpdate(
                             id.getUuid(),
                             (float) position.x,
-                            (float) position.y)
+                            (float) position.y,
+                            player)
+            );
+        });
+        gameModels.forEach(model -> {
+            Vector2 position = model.getPhysicsBody().getWorldCenter();
+            log.debug("GameModel: " + position);
+            result.add(
+                    new EntityUpdate(
+                            model.getUuid(),
+                            (float) position.x,
+                            (float) position.y,
+                            model)
             );
         });
         return result;

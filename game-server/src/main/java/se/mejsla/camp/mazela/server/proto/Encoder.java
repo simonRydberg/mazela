@@ -16,6 +16,8 @@
 package se.mejsla.camp.mazela.server.proto;
 
 import se.mejsla.camp.mazela.game.EntityUpdate;
+import se.mejsla.camp.mazela.game.domain.Player;
+import se.mejsla.camp.mazela.game.domain.Score;
 import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
 
 import java.nio.ByteBuffer;
@@ -46,18 +48,36 @@ public abstract class Encoder {
                     .setMostSignificantID(update.getEntityID().getMostSignificantBits())
                     .build();
 
-            MazelaProtocol.GameboardUpdate.EntityUpdate eu
-                    = MazelaProtocol.GameboardUpdate.EntityUpdate
-                    .newBuilder()
-                    .setEntityType(MazelaProtocol.GameboardUpdate.EntityUpdate.EntityType.PlayerEntity)
-                    .setPlayerEntity(MazelaProtocol.PlayerEntity.newBuilder()
-                            .setColor(colorForPlayer.get(entityID))
-                            .setCoords(coordinate)
-                            .setUuid(uuid)
-                            .build())
-                    .build();
+            if (update.getModel() instanceof Player) {
+                Player player = (Player) update.getModel();
 
-            gameboardBuilder.addUpdates(eu);
+                MazelaProtocol.GameboardUpdate.EntityUpdate eu
+                        = MazelaProtocol.GameboardUpdate.EntityUpdate
+                        .newBuilder()
+                        .setEntityType(MazelaProtocol.GameboardUpdate.EntityUpdate.EntityType.PlayerEntity)
+                        .setPlayerEntity(MazelaProtocol.PlayerEntity.newBuilder()
+                                .setColor(colorForPlayer.get(entityID))
+                                .setCoords(coordinate)
+                                .setScore(player.getScore().intValue())
+                                .setName(player.getName())
+                                .setUuid(uuid)
+                                .build())
+                        .build();
+                gameboardBuilder.addUpdates(eu);
+            } else if (update.getModel() instanceof Score) {
+                Score score = (Score) update.getModel();
+                MazelaProtocol.GameboardUpdate.EntityUpdate eu
+                        = MazelaProtocol.GameboardUpdate.EntityUpdate
+                        .newBuilder()
+                        .setEntityType(MazelaProtocol.GameboardUpdate.EntityUpdate.EntityType.ScoreEntity)
+                        .setScoreEntity(MazelaProtocol.ScoreEntity.newBuilder()
+                                .setScore(score.getSore())
+                                .setCoords(coordinate)
+                                .build())
+                        .build();
+                gameboardBuilder.addUpdates(eu);
+            }
+
         }
         final byte[] bytes = MazelaProtocol.Envelope
                 .newBuilder()

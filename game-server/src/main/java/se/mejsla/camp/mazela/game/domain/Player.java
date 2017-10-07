@@ -16,12 +16,13 @@
 package se.mejsla.camp.mazela.game.domain;
 
 import com.google.common.base.Preconditions;
+
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
+
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
-import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
 
 /**
  *
@@ -37,8 +38,10 @@ public class Player implements GameModel{
     private final AtomicBoolean needsUpdate = new AtomicBoolean(false);
     private final AtomicInteger score = new AtomicInteger(0);
     private  String name;
+    private final UUID uuid;
 
-    public Player(final Body physicsBody) {
+    public Player(UUID uuid, final Body physicsBody) {
+        this.uuid = uuid;
         this.physicsBody = Preconditions.checkNotNull(physicsBody);
     }
 
@@ -61,6 +64,10 @@ public class Player implements GameModel{
         }
         force.multiply(4000);
         this.physicsBody.applyForce(force);
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
     public Body getPhysicsBody() {

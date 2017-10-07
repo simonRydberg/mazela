@@ -15,6 +15,8 @@
  */
 package se.mejsla.camp.mazela.game;
 
+import se.mejsla.camp.mazela.game.domain.GameModel;
+
 import java.util.UUID;
 
 /**
@@ -26,11 +28,13 @@ public class EntityUpdate {
     private final UUID entityID;
     private final float x;
     private final float y;
+    private final GameModel model;
 
-    public EntityUpdate(UUID entityID, float x, float y) {
+    public EntityUpdate(UUID entityID, float x, float y, GameModel model) {
         this.entityID = entityID;
         this.x = x;
         this.y = y;
+        this.model = model;
     }
 
     public UUID getEntityID() {
@@ -43,5 +47,9 @@ public class EntityUpdate {
 
     public float getY() {
         return y;
+    }
+
+    public GameModel getModel() {
+        return model;
     }
 }
