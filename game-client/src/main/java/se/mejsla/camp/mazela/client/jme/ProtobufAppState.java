@@ -161,16 +161,27 @@ public class ProtobufAppState extends AbstractAppState {
                 if (updatesList != null) {
                     final ArrayList<EntityUpdate> pendingUpdates = new ArrayList<>();
                     for (MazelaProtocol.GameboardUpdate.EntityUpdate update : updatesList) {
-                        EntityUpdate pendingUpdate = new EntityUpdate(
-                                new UUID(
-                                        update.getUuid().getMostSignificantID(),
-                                        update.getUuid().getLeastSignificantID()
-                                ),
-                                update.getCoords().getX(),
-                                update.getCoords().getY(),
-                                update.getState(),
-                                update.getColor()
-                        );
+                        EntityUpdate pendingUpdate;
+                        switch (update.getEntityType()) {
+                            case PlayerEntity:
+                                MazelaProtocol.PlayerEntity entity = update.getPlayerEntity();
+                                pendingUpdate = new EntityUpdate(
+                                        new UUID(
+                                                entity.getUuid().getMostSignificantID(),
+                                                entity.getUuid().getLeastSignificantID()
+                                        ),
+                                        entity.getCoords().getX(),
+                                        entity.getCoords().getY(),
+                                        entity.getScore(),
+                                        entity.getColor()
+                                );
+                                break;
+                            case ScoreEntity:
+                                throw new UnsupportedOperationException("");
+//                                break;
+                            default:
+                                throw new IllegalStateException("invalid entity type: " + update.getEntityType());
+                        }
                         pendingUpdates.add(pendingUpdate);
                     }
                     this.gameboardAppstate.setPendingUpdates(pendingUpdates);
