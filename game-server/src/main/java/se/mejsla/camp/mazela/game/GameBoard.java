@@ -31,6 +31,7 @@ import se.mejsla.camp.mazela.network.common.protos.MazelaProtocol;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -51,8 +52,7 @@ public class GameBoard {
     private final XORShiftRandom fastRandom = new XORShiftRandom(System.currentTimeMillis());
     private final PhysicsSpace physicsSpace = new PhysicsSpace(WORLD_BOUNDS_WIDTH, WORLD_BOUNDS_HEIGHT);
 
-    private final ConcurrentHashMap<ConnectionID, Player> players
-            = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<ConnectionID, Player> players = new ConcurrentHashMap<>();
 
     private final CopyOnWriteArrayList<ConnectionID> pendingPlayerAdds;
     private final CopyOnWriteArrayList<ConnectionID> pendingPlayerDeletes;
@@ -66,6 +66,7 @@ public class GameBoard {
 
     private void setupEdges() {
         final Rectangle horizRectangle = new Rectangle(PLAYER_INITAL_AREA_WIDTH + 2, 1.0);
+        final Rectangle verticalRectangle = new Rectangle(1, PLAYER_INITAL_AREA_WIDTH + 2);
 
         final Body top = new Body();
         final BodyFixture topFixture = new BodyFixture(horizRectangle);
@@ -82,6 +83,22 @@ public class GameBoard {
         bottom.setMass(MassType.INFINITE);
         bottom.translate(0, -(PLAYER_INITAL_AREA_HEIGHT / 2) - 0.5);
         this.physicsSpace.getWorld().addBody(bottom);
+
+        final Body left = new Body();
+        final BodyFixture leftFixture = new BodyFixture(verticalRectangle);
+        leftFixture.setRestitution(BOUNCYNESS);
+        left.addFixture(leftFixture);
+        left.setMass(MassType.INFINITE);
+        left.translate(-(PLAYER_INITAL_AREA_HEIGHT / 2) - 0.5, 0);
+        this.physicsSpace.getWorld().addBody(left);
+
+        final Body right = new Body();
+        final BodyFixture rightFixture = new BodyFixture(verticalRectangle);
+        rightFixture.setRestitution(BOUNCYNESS);
+        right.addFixture(rightFixture);
+        right.setMass(MassType.INFINITE);
+        right.translate((PLAYER_INITAL_AREA_HEIGHT / 2) + 0.5, 0);
+        this.physicsSpace.getWorld().addBody(right);
     }
 
     public void addPlayer(ConnectionID connectionID) {
@@ -159,7 +176,7 @@ public class GameBoard {
         return this.players
                 .entrySet()
                 .stream()
-                .map(e -> e.getKey())
+                .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
     }
 

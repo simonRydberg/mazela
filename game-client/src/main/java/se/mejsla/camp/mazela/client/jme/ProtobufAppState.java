@@ -67,6 +67,7 @@ public class ProtobufAppState extends AbstractAppState {
             // Pretend that we got this from the user
             log.debug("Connecting to the server");
             this.networkClient.connect("127.0.0.1", 1666);
+            // this.networkClient.connect("192.168.1.27", 1666);
         } else {
             if (!authenticated) {
                 if (!awaitingAuthentication) {
