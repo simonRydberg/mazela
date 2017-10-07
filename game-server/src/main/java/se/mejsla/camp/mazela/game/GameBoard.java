@@ -109,10 +109,18 @@ public class GameBoard {
         this.physicsSpace.getWorld().addBody(right);
 
         // Adding initial scores
-        addScoreRandomPos(1);
-        addScoreRandomPos(3);
-        addScoreRandomPos(5);
-        addScoreRandomPos(7);
+        addScoreRandomPos(1, createColor(50,50,50));
+        addScoreRandomPos(3,createColor(100,100,100));
+        addScoreRandomPos(5,createColor(150,150,150));
+        addScoreRandomPos(7,createColor(200,200,200));
+    }
+
+    private MazelaProtocol.Color createColor(int r, int g, int b) {
+        return MazelaProtocol.Color.newBuilder()
+                .setRed(r)
+                .setGreen(g)
+                .setBlue(b)
+                .build();
     }
 
     public void addPlayer(ConnectionID connectionID) {
@@ -150,7 +158,7 @@ public class GameBoard {
         this.pendingPlayerAdds.clear();
     }
 
-    private void addScoreRandomPos(int score) {
+    private void addScoreRandomPos(int score, MazelaProtocol.Color color) {
         final Body body = new Body();
         final BodyFixture bodyFixture = new BodyFixture(new Circle(1.0));
         bodyFixture.setRestitution(BOUNCYNESS);
@@ -160,7 +168,7 @@ public class GameBoard {
         double initialY = this.fastRandom.unitRandom() * PLAYER_INITAL_AREA_HEIGHT - (PLAYER_INITAL_AREA_HEIGHT / 2);
         body.getTransform().translate(initialX, initialY);
         this.physicsSpace.getWorld().addBody(body);
-        Score scoreModel = new Score(body, score);
+        Score scoreModel = new Score(body, score, color);
         body.setUserData(scoreModel);
         this.gameModels.add(scoreModel);
         log.debug("Adding score {} at '{}-{}'to the board", score, initialX, initialY);
@@ -267,7 +275,7 @@ public class GameBoard {
                 return true;
             }
 
-            player.addScore(score.getSore());
+            player.addScore(score.getScore());
             gameBoard.physicsSpace.getWorld().removeBody(scoreBody);
             return true;
         }

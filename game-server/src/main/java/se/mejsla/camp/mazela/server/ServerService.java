@@ -47,8 +47,7 @@ public class ServerService extends AbstractScheduledService {
     private long lastFrameTime = System.nanoTime();
     private final ExecutorService backgroundService;
     private final GameBoard gameBoard;
-    private final CopyOnWriteArrayList<ConnectionID> authenticatedConnections
-            = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<ConnectionID> authenticatedConnections = new CopyOnWriteArrayList<>();
 
     private final Map<UUID, MazelaProtocol.Color> colorForPlayer = new HashMap<>();
     private final List<MazelaProtocol.Color> freeColors = new ArrayList<>(Arrays.asList(
